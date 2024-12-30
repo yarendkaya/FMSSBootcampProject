@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 class SampleRepoImpl @Inject constructor(private val database: AppDatabase) : SampleRepository {
     override suspend fun getUsers(): Flow<ResponseState<List<SamplePerson>>> = flow {
+        emit(ResponseState.Loading)
         try {
             val users = database.personDao().getAllUsers().map { it.toDomainModel() }
             if (users.isNotEmpty()) {

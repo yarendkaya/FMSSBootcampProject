@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,15 +32,29 @@ class SampleViewModel @Inject constructor(
             getUserUseCase().collect {
                 when (it) {
                     is ResponseState.Loading -> {
-                        _sampleState.value = SampleState(isLoading = true)
+                        _sampleState.update {
+                            it.copy(
+                                isLoading = true
+                            )
+                        }
                     }
 
                     is ResponseState.Success -> {
-                        _sampleState.value = SampleState(users = it.data)
+                        _sampleState.update { sampleState ->
+                            sampleState.copy(
+                                users = it.data, // burada eski halinde uida veri gelmiyordu.
+                                isLoading = false
+                            )
+                        }
                     }
 
                     is ResponseState.Error -> {
-                        _sampleState.value = SampleState(error = it.message)
+                        _sampleState.update { sampleState ->
+                            sampleState.copy(
+                                error = sampleState.error,
+                                isLoading = false
+                            )
+                        }
                     }
                 }
             }
