@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.ksp)
-
-
 }
 
 android {
@@ -58,6 +56,8 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":presentation:sample"))
     implementation(project(":domain"))
+    implementation(project(":presentation:home"))
+    implementation(project(":presentation:detail"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -80,6 +80,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     //navigation
     implementation(libs.compose.navigation)
-    implementation("androidx.compose.runtime:runtime:1.7.6")
+    implementation(libs.androidx.runtime)
+    implementation("com.google.code.gson:gson:2.11.0")
 
 }
