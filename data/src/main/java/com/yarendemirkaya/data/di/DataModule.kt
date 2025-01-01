@@ -4,12 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.yarendemirkaya.data.datasource.local.MovieDatabase
 import com.yarendemirkaya.data.datasource.remote.MovieApi
-import com.yarendemirkaya.data.db.AppDatabase
 import com.yarendemirkaya.data.repo.MovieRepoImpl
-import com.yarendemirkaya.data.repo.SampleRepoImpl
 import com.yarendemirkaya.data.util.Constants.Companion.BASE_URL
 import com.yarendemirkaya.domain.repo.MovieRepository
-import com.yarendemirkaya.domain.repo.SampleRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

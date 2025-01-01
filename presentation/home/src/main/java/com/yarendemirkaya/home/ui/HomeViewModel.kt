@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yarendemirkaya.core.ResponseState
 import com.yarendemirkaya.domain.model.MovieModel
-import com.yarendemirkaya.domain.model.MoviesResponseModel
-import com.yarendemirkaya.domain.usecase.GetAllUsersUseCase
+import com.yarendemirkaya.domain.usecase.GetAllMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getAllUsersCase: GetAllUsersUseCase,
+    private val getAllUsersCase: GetAllMoviesUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -37,8 +36,12 @@ class HomeViewModel @Inject constructor(
 
                     is ResponseState.Success -> {
                         _uiState.update { uiState ->
+                            val newCategories = uiState.categories.apply {
+                                addAll(it.data.map { movie -> movie.category })
+                            }
                             uiState.copy(
-                                movies = it.data, // burada eski halinde uida veri gelmiyordu.
+                                movies = it.data,
+                                categories = newCategories,
                                 isLoading = false
                             )
                         }
@@ -61,5 +64,6 @@ class HomeViewModel @Inject constructor(
 data class UiState(
     val isLoading: Boolean = false, // ?
     val movies: List<MovieModel> = emptyList(),
+    val categories: MutableSet<String> = mutableSetOf("All"), // mutable set kullanarak categories listesinde her elemandan sadece birer tane olmasnı sağlıyoruz.
     val error: String? = null
 )

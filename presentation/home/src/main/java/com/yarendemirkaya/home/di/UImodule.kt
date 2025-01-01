@@ -1,7 +1,7 @@
 package com.yarendemirkaya.home.di
 
 import com.yarendemirkaya.domain.repo.MovieRepository
-import com.yarendemirkaya.domain.usecase.GetAllUsersUseCase
+import com.yarendemirkaya.domain.usecase.GetAllMoviesUseCase
 import com.yarendemirkaya.home.ui.HomeViewModel
 import dagger.Module
 import dagger.Provides
@@ -14,14 +14,14 @@ import dagger.hilt.android.components.ViewModelComponent
 object UImodule {
 
     @Provides
-    fun provideGetAllUsersUseCase(repo: MovieRepository): GetAllUsersUseCase {
-        return GetAllUsersUseCase(repo)
+    fun provideGetAllUsersUseCase(repo: MovieRepository): GetAllMoviesUseCase {
+        return GetAllMoviesUseCase(repo)
     }
 
 
     @Provides
     fun provideHomeViewModel(
-        getAllUsersCase: GetAllUsersUseCase,
+        getAllUsersCase: GetAllMoviesUseCase,
     ): HomeViewModel {
         return HomeViewModel(getAllUsersCase)
     }

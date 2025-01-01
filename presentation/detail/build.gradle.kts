@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yarendemirkaya.home"
+    namespace = "com.yarendemirkaya.detail"
     compileSdk = 34
 
     defaultConfig {
@@ -68,6 +68,5 @@ dependencies {
 
     implementation(libs.compose.navigation)
     implementation(libs.live.data)
-    implementation(libs.gson)
-    implementation (libs.landscapist.glide)
+
 }
