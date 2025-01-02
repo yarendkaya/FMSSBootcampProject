@@ -19,10 +19,10 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
 
     when {
         viewState.isLoading -> {
-            // Show loading indicator
+
         }
         viewState.error != null -> {
-            // Show error message
+
             Text(text = viewState.error!!)
         }
         viewState.movies.isNotEmpty() -> {
