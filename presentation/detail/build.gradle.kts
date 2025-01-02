@@ -43,6 +43,7 @@ android {
 dependencies {
 
     implementation(project(":domain"))
+    implementation(project(":presentation:home"))
     implementation(project(":core"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -69,4 +70,5 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.live.data)
 
+    implementation (libs.landscapist.glide)
 }

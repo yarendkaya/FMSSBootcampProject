@@ -5,6 +5,7 @@ import com.yarendemirkaya.data.datasource.model.response.MovieCartResponse
 import com.yarendemirkaya.data.datasource.model.response.MoviesResponse
 import com.yarendemirkaya.data.datasource.model.request.DeleteMovieRequest
 import com.yarendemirkaya.data.datasource.model.request.InsertMovieRequest
+import com.yarendemirkaya.domain.model.InsertMovieRequestModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -18,7 +19,7 @@ interface MovieApi {
 
     @POST("insertMovie.php")
     suspend fun insertMovie(
-        @Body insertMovieRequest: InsertMovieRequest
+        @Body insertMovieRequest: InsertMovieRequestModel
     ): Response<CartResponse>
 
     @POST("deleteMovie.php")

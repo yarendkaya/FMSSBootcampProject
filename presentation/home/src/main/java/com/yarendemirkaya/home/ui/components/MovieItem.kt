@@ -1,6 +1,7 @@
 package com.yarendemirkaya.home.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,12 @@ import com.yarendemirkaya.home.R
 fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Unit) {
     val image = "http://kasimadalan.pe.hu/movies/images/${movie.image}"
 
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { onItemClick() },
+        verticalArrangement = Arrangement.Top
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

@@ -1,5 +1,7 @@
 package com.yarendemirkaya.data.datasource.model.request
 
+import com.yarendemirkaya.domain.model.InsertMovieRequestModel
+
 data class InsertMovieRequest(
     val id: Int,
     val name: String,
@@ -13,3 +15,37 @@ data class InsertMovieRequest(
     val orderAmount: Int,
     val userName: String
 )
+
+fun InsertMovieRequest.toDataModel(): InsertMovieRequestModel {
+    return InsertMovieRequestModel(
+        id = this.id,
+        name = this.name,
+        image = this.image,
+        price = this.price,
+        category = this.category,
+        rating = this.rating,
+        year = this.year,
+        director = this.director,
+        description = this.description,
+        orderAmount = this.orderAmount,
+        userName = this.userName
+    )
+}
+
+fun InsertMovieRequestModel.toDomainModel(): InsertMovieRequest {
+    return InsertMovieRequest(
+        id = this.id,
+        name = this.name,
+
+        image = this.image,
+
+        price = this.price,
+        category = this.category,
+        rating = this.rating,
+        year = this.year,
+        director = this.director,
+        description = this.description,
+        orderAmount = this.orderAmount,
+        userName = this.userName
+    )
+}
