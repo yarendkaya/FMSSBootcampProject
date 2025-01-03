@@ -1,6 +1,7 @@
 package com.yarendemirkaya.data.datasource.model.response
 
 import com.google.gson.annotations.SerializedName
+import com.yarendemirkaya.domain.model.MovieCartModel
 
 data class MovieCart(
     @SerializedName("cartId")
@@ -26,3 +27,36 @@ data class MovieCart(
     @SerializedName("userName")
     val userName: String
 )
+
+fun MovieCart.toDomainModel(): MovieCartModel {
+    return MovieCartModel(
+        cartId = this.cartId,
+        name = this.name,
+        image = this.image,
+        price = this.price,
+        category = this.category,
+        rating = this.rating,
+        year = this.year,
+        director = this.director,
+        description = this.description,
+        orderAmount = this.orderAmount,
+        userName = this.userName
+    )
+}
+
+fun MovieCartModel.toDataModel(): MovieCart {
+    return MovieCart(
+        cartId = this.cartId,
+        name = this.name,
+        image = this.image,
+        price = this.price,
+        category = this.category,
+        rating = this.rating,
+        year = this.year,
+        director = this.director,
+        description = this.description,
+        orderAmount = this.orderAmount,
+        userName = this.userName
+    )
+}
+

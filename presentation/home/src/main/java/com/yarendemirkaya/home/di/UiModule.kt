@@ -2,6 +2,7 @@ package com.yarendemirkaya.home.di
 
 import com.yarendemirkaya.domain.repo.MovieRepository
 import com.yarendemirkaya.domain.usecase.GetAllMoviesUseCase
+import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
 import com.yarendemirkaya.home.ui.HomeViewModel
 import dagger.Module
 import dagger.Provides
@@ -20,10 +21,15 @@ object HomeUIModule {
 
 
     @Provides
-    fun provideHomeViewModel(
-        getAllUsersCase: GetAllMoviesUseCase,
-    ): HomeViewModel {
-        return HomeViewModel(getAllUsersCase)
+    fun provideInsertMovieUseCase(repo: MovieRepository): InsertMovieUseCase {
+        return InsertMovieUseCase(repo)
     }
 
+    @Provides
+    fun provideHomeViewModel(
+        getAllUsersCase: GetAllMoviesUseCase,
+        insertMovieUseCase: InsertMovieUseCase
+    ): HomeViewModel {
+        return HomeViewModel(getAllUsersCase, insertMovieUseCase)
+    }
 }

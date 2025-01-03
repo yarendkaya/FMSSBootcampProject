@@ -39,9 +39,7 @@ fun DetailScreen(
     movie: MovieModel,
     viewModel: DetailViewModel, navController: NavController
 ) {
-
     MovieImage(movie, navController)
-
 }
 
 @Composable
