@@ -1,7 +1,7 @@
 package com.yarendemirkaya.domain.model
 
-data class InsertMovieRequestModel(
-    val id: Int,
+data class MovieCartModel(
+    val cartId: Int,
     val name: String,
     val image: String,
     val price: Int,

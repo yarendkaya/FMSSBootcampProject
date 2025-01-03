@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.google.gson.Gson
+import com.yarendemirkaya.cart.ui.CartScreen
+import com.yarendemirkaya.cart.ui.CartViewModel
 import com.yarendemirkaya.detail.ui.DetailScreen
 import com.yarendemirkaya.detail.ui.DetailViewModel
 import com.yarendemirkaya.domain.model.MovieModel
@@ -18,6 +20,7 @@ import com.yarendemirkaya.home.ui.HomeViewModel
 fun NavGraph(
     modifier: Modifier = Modifier, viewModel: HomeViewModel,
     detailViewModel: DetailViewModel,
+    cartViewModel: CartViewModel,
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = "home") {
@@ -31,6 +34,9 @@ fun NavGraph(
             val movieJson = backStackEntry.arguments?.getString("movie")
             val movie = Gson().fromJson(movieJson, MovieModel::class.java)
             DetailScreen(movie, detailViewModel, navController)
+        }
+        composable("cart") {
+            CartScreen(cartViewModel)
         }
     }
 }

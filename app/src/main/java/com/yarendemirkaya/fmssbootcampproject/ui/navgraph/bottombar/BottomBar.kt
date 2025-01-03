@@ -21,16 +21,15 @@ import androidx.navigation.NavController
 
 @Composable
 fun DynamicBottomBar(items: List<BottomBarItem>, navController: NavController) {
-    val selectedRoute = remember { mutableStateOf(items.firstOrNull()?.route ?: "") }
     BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
         containerColor = Color.Black,
         contentColor = Color(0xFFFFA500)
     ) {
         items.forEach { item ->
-            NavigationBarItem(selected = selectedRoute.value == item.route,
+            NavigationBarItem(
+                selected = true,
                 onClick = {
-                    selectedRoute.value = item.route
                     navController.navigate(item.route)
                 },
                 colors = NavigationBarItemDefaults.colors(
@@ -53,7 +52,9 @@ fun DynamicBottomBar(items: List<BottomBarItem>, navController: NavController) {
                         contentDescription = item.title,
                         modifier = Modifier.size(24.dp)
                     )
-                })
+                }
+            )
         }
     }
 }
+

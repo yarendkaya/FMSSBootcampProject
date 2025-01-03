@@ -1,13 +1,13 @@
-package com.yarendemirkaya.home.ui
+package com.yarendemirkaya.cart.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yarendemirkaya.core.ResponseState
-import com.yarendemirkaya.domain.model.CartResponseModel
-import com.yarendemirkaya.domain.model.InsertMovieModel
-import com.yarendemirkaya.domain.model.MovieModel
-import com.yarendemirkaya.domain.usecase.GetAllMoviesUseCase
-import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
+import com.yarendemirkaya.domain.model.DeleteMovieRequestModel
+import com.yarendemirkaya.domain.model.MovieCartModel
+import com.yarendemirkaya.domain.model.MovieCartResponseModel
+import com.yarendemirkaya.domain.usecase.DeleteMovieUseCase
+import com.yarendemirkaya.domain.usecase.GetCartMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,17 +17,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getAllUsersCase: GetAllMoviesUseCase,
-    private val insertMovieUseCase: InsertMovieUseCase
+class CartViewModel @Inject constructor(
+    private val getCartMoviesUseCase: GetCartMoviesUseCase,
+    private val deleteMovieUseCase: DeleteMovieUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    fun insertMovie(insertMovieModel: InsertMovieModel) {
+
+    fun deleteMovie(deleteMovieRequest: DeleteMovieRequestModel) {
         viewModelScope.launch {
-            insertMovieUseCase(insertMovieModel).collect {
+            deleteMovieUseCase(deleteMovieRequest).collect {
                 when (it) {
                     is ResponseState.Loading -> {
                         _uiState.update {
@@ -38,18 +39,18 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is ResponseState.Success -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = false,
-                                insertMovieResult = it.data
+                        _uiState.update {
+                            it.copy(
+                                deletedMovie = it.deletedMovie,
+                                isLoading = false
                             )
                         }
                     }
 
                     is ResponseState.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                error = uiState.error,
+                        _uiState.update {
+                            it.copy(
+                                error = it.error,
                                 isLoading = false
                             )
                         }
@@ -59,9 +60,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchMovies() {
+
+    fun getCartMovies(userName: String) {
         viewModelScope.launch {
-            getAllUsersCase().collect {
+            getCartMoviesUseCase(userName).collect {
                 when (it) {
                     is ResponseState.Loading -> {
                         _uiState.update {
@@ -72,22 +74,18 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is ResponseState.Success -> {
-                        _uiState.update { uiState ->
-                            val newCategories = uiState.categories.apply {
-                                addAll(it.data.map { movie -> movie.category })
-                            }
-                            uiState.copy(
-                                movies = it.data,
-                                categories = newCategories,
+                        _uiState.update {
+                            it.copy(
+                                movies = it.movies,
                                 isLoading = false
                             )
                         }
                     }
 
                     is ResponseState.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                error = uiState.error,
+                        _uiState.update {
+                            it.copy(
+                                error = it.error,
                                 isLoading = false
                             )
                         }
@@ -100,8 +98,7 @@ class HomeViewModel @Inject constructor(
 
 data class UiState(
     val isLoading: Boolean = false, // ?
-    val movies: List<MovieModel> = emptyList(),
-    val categories: MutableSet<String> = mutableSetOf("All"), // mutable set kullanarak categories listesinde her elemandan sadece birer tane olmasnı sağlıyoruz.
-    val error: String? = null,
-    val insertMovieResult: CartResponseModel? = null
+    val movies: List<MovieCartModel>? = null,
+    val deletedMovie: DeleteMovieRequestModel? = null,
+    val error: String? = null
 )

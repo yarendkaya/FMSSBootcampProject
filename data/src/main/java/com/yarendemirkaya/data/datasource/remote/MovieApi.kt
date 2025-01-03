@@ -1,16 +1,16 @@
 package com.yarendemirkaya.data.datasource.remote
 
+import com.yarendemirkaya.data.datasource.model.request.DeleteMovieRequest
+import com.yarendemirkaya.data.datasource.model.request.InsertMovieRequest
 import com.yarendemirkaya.data.datasource.model.response.CartResponse
 import com.yarendemirkaya.data.datasource.model.response.MovieCartResponse
 import com.yarendemirkaya.data.datasource.model.response.MoviesResponse
-import com.yarendemirkaya.data.datasource.model.request.DeleteMovieRequest
-import com.yarendemirkaya.data.datasource.model.request.InsertMovieRequest
-import com.yarendemirkaya.domain.model.InsertMovieRequestModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface MovieApi {
 
@@ -19,17 +19,16 @@ interface MovieApi {
 
     @POST("insertMovie.php")
     suspend fun insertMovie(
-        @Body insertMovieRequest: InsertMovieRequestModel
+        @Body insertMovieRequest: InsertMovieRequest
     ): Response<CartResponse>
 
     @POST("deleteMovie.php")
     suspend fun deleteMovie(
-       @Body deleteMovieRequest: DeleteMovieRequest
+        @Body deleteMovieRequest: DeleteMovieRequest
     ): Response<CartResponse>
 
-    @POST
+    @POST("getMovieCart.php")
     suspend fun getMovieCart(
-        @Field("userName") userName: String
+        @Query("userName") userName: String
     ): Response<MovieCartResponse>
-
 }

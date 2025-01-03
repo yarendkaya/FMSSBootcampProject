@@ -21,15 +21,25 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
         viewState.isLoading -> {
 
         }
+
         viewState.error != null -> {
 
             Text(text = viewState.error!!)
         }
+
         viewState.movies.isNotEmpty() -> {
-            MovieGrid(viewState.movies, viewState.categories.toList(), navController)
+            MovieGrid(
+                viewState.movies,
+                viewState.categories.toList(),
+                navController,
+                onCartClick = { movie ->
+                    viewModel.insertMovie(movie)
+                }
+            )
         }
     }
 }
+
 
 
 

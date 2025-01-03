@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.gson.Gson
+import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.model.MovieModel
 
 @Composable
@@ -26,14 +27,14 @@ fun MovieGrid(
     categories: List<String>,
     navController: NavController,
     onSearchQueryChange: (String) -> Unit = {},
-    onCartClick: (MovieModel) -> Unit = {}
+    onCartClick: (InsertMovieModel) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(bottom = 88.dp), // Bottom bar yüksekliği kadar padding
+            .padding(bottom = 88.dp),
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(30.dp)
@@ -50,7 +51,22 @@ fun MovieGrid(
                     val movieJson = Uri.encode(Gson().toJson(movie))
                     navController.navigate("detail/$movieJson")
                 },
-                onCartClick = { onCartClick(movie) }
+                onCartClick = {
+                    val insertMovieModel = InsertMovieModel(
+                        id = movie.id,
+                        name = movie.name,
+                        image = movie.image,
+                        price = movie.price,
+                        category = movie.category,
+                        rating = movie.rating,
+                        year = movie.year,
+                        director = movie.director,
+                        description = movie.description,
+                        orderAmount = 1,
+                        userName = null
+                    )
+                    onCartClick(insertMovieModel)
+                }
             )
         }
     }

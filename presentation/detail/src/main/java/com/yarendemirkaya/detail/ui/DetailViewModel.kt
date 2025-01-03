@@ -3,7 +3,7 @@ package com.yarendemirkaya.detail.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yarendemirkaya.core.ResponseState
-import com.yarendemirkaya.domain.model.InsertMovieRequestModel
+import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +22,7 @@ class DetailViewModel @Inject constructor(private val insertMovieUseCase: Insert
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
 
-    fun addMovie(movie: InsertMovieRequestModel) {
+    fun addMovie(movie: InsertMovieModel) {
         viewModelScope.launch {
             insertMovieUseCase(movie).collect {
                 when (it) {

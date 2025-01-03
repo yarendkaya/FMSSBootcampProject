@@ -12,11 +12,6 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 object DetailUIModule {
 
-    @Provides
-    fun provideInsertMovieUseCase(repo: MovieRepository): InsertMovieUseCase {
-        return InsertMovieUseCase(repo)
-    }
-
 
     @Provides
     fun provideDetailViewModel(

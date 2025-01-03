@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.Navigation
 import androidx.navigation.compose.*
 import androidx.navigation.compose.rememberNavController
+import com.yarendemirkaya.cart.ui.CartViewModel
 import com.yarendemirkaya.detail.ui.DetailViewModel
 import com.yarendemirkaya.fmssbootcampproject.R
 import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.NavGraph
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
     //    private val viewModel: SampleViewModel by viewModels()
     private val viewModel: HomeViewModel by viewModels()
     private val detailViewModel: DetailViewModel by viewModels()
+    private val cartViewModel: CartViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,20 +51,14 @@ class MainActivity : ComponentActivity() {
                 )
                 val navController = rememberNavController()
 
-                val currentBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentRoute = currentBackStackEntry?.destination?.route
-
-                val showBottomBar = currentRoute == "home"
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-                        if (showBottomBar) {
-                            DynamicBottomBar(
-                                items = bottomNavItems,
-                                navController = navController
-                            )
-                        }
+                        DynamicBottomBar(
+                            items = bottomNavItems,
+                            navController = navController
+                        )
                     }
 
 //                    floatingActionButton = {
@@ -85,7 +81,8 @@ class MainActivity : ComponentActivity() {
                             .padding(paddingValues),
                         viewModel = viewModel,
                         navController = navController,
-                        detailViewModel = detailViewModel
+                        detailViewModel = detailViewModel,
+                        cartViewModel = cartViewModel
                     )
                 }
             }
