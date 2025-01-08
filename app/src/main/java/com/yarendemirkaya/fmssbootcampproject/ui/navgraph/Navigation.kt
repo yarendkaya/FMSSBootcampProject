@@ -13,6 +13,8 @@ import com.yarendemirkaya.cart.ui.CartViewModel
 import com.yarendemirkaya.detail.ui.DetailScreen
 import com.yarendemirkaya.detail.ui.DetailViewModel
 import com.yarendemirkaya.domain.model.MovieModel
+import com.yarendemirkaya.favorites.ui.FavoritesScreen
+import com.yarendemirkaya.favorites.ui.FavoritesViewModel
 import com.yarendemirkaya.home.ui.HomeScreen
 import com.yarendemirkaya.home.ui.HomeViewModel
 
@@ -21,6 +23,7 @@ fun NavGraph(
     modifier: Modifier = Modifier, viewModel: HomeViewModel,
     detailViewModel: DetailViewModel,
     cartViewModel: CartViewModel,
+    favoritesViewModel: FavoritesViewModel,
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = "home") {
@@ -35,8 +38,13 @@ fun NavGraph(
             val movie = Gson().fromJson(movieJson, MovieModel::class.java)
             DetailScreen(movie, detailViewModel, navController)
         }
+
         composable("cart") {
             CartScreen(cartViewModel)
+        }
+
+        composable("favorites") {
+            FavoritesScreen(favoritesViewModel, navController)
         }
     }
 }

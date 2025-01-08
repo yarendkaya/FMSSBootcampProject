@@ -66,8 +66,9 @@ dependencies {
 
     implementation(libs.androidx.runtime)
 
-    implementation(libs.compose.navigation)
+
     implementation(libs.live.data)
     implementation(libs.gson)
     implementation (libs.landscapist.glide)
+    implementation(libs.compose.navigation)
 }

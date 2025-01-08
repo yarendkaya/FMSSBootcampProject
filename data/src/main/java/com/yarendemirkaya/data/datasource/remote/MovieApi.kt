@@ -1,16 +1,13 @@
 package com.yarendemirkaya.data.datasource.remote
 
-import com.yarendemirkaya.data.datasource.model.request.DeleteMovieRequest
-import com.yarendemirkaya.data.datasource.model.request.InsertMovieRequest
 import com.yarendemirkaya.data.datasource.model.response.CartResponse
 import com.yarendemirkaya.data.datasource.model.response.MovieCartResponse
 import com.yarendemirkaya.data.datasource.model.response.MoviesResponse
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface MovieApi {
 
@@ -18,17 +15,40 @@ interface MovieApi {
     suspend fun getAllMovies(): Response<MoviesResponse>
 
     @POST("insertMovie.php")
+    @FormUrlEncoded
     suspend fun insertMovie(
-        @Body insertMovieRequest: InsertMovieRequest
+        @Field("name")
+        name: String,
+        @Field("image")
+        image: String,
+        @Field("price")
+        price: Int,
+        @Field("category")
+        category: String,
+        @Field("rating")
+        rating: Double,
+        @Field("year")
+        year: Int,
+        @Field("director")
+        director: String,
+        @Field("description")
+        description: String,
+        @Field("orderAmount")
+        orderAmount: Int,
+        @Field("userName")
+        userName: String
     ): Response<CartResponse>
 
     @POST("deleteMovie.php")
+    @FormUrlEncoded
     suspend fun deleteMovie(
-        @Body deleteMovieRequest: DeleteMovieRequest
+        @Field("cartId") cartId: Int,
+        @Field("userName") userName: String
     ): Response<CartResponse>
 
     @POST("getMovieCart.php")
+    @FormUrlEncoded
     suspend fun getMovieCart(
-        @Query("userName") userName: String
+        @Field("userName") userName: String
     ): Response<MovieCartResponse>
 }

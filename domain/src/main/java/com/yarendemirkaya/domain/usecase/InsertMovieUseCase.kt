@@ -8,10 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 class InsertMovieUseCase(private val movieRepository: MovieRepository) {
     suspend operator fun invoke(movieInsert: InsertMovieModel): Flow<ResponseState<CartResponseModel>> {
-        return movieRepository.insertMovie(
-            movieInsert.copy(
-                userName = "yaren_demirkaya"
-            )
-        )
+        return movieRepository.insertMovie(movieInsert)
     }
 }

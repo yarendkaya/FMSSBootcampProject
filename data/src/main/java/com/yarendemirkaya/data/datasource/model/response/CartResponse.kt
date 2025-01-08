@@ -15,7 +15,3 @@ fun CartResponse.toDomainModel() = CartResponseModel(
     message = message
 )
 
-fun CartResponseModel.toDataModel() = CartResponse(
-    success = success,
-    message = message
-)

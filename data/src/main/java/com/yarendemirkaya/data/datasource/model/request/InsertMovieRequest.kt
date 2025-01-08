@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName
 import com.yarendemirkaya.domain.model.InsertMovieModel
 
 data class InsertMovieRequest(
-    @SerializedName("id")
-    val id: Int,
     @SerializedName("name")
     val name: String,
     @SerializedName("image")
@@ -30,7 +28,6 @@ data class InsertMovieRequest(
 
 fun InsertMovieRequest.toDomainModel(): InsertMovieModel {
     return InsertMovieModel(
-        id = this.id,
         name = this.name,
         image = this.image,
         price = this.price,
@@ -40,23 +37,7 @@ fun InsertMovieRequest.toDomainModel(): InsertMovieModel {
         director = this.director,
         description = this.description,
         orderAmount = this.orderAmount,
-        userName = this.userName
-    )
-}
 
-fun InsertMovieModel.toDataModel(): InsertMovieRequest {
-    return InsertMovieRequest(
-        id = this.id,
-        name = this.name,
-        image = this.image,
-        price = this.price,
-        category = this.category,
-        rating = this.rating,
-        year = this.year,
-        director = this.director,
-        description = this.description,
-        orderAmount = this.orderAmount,
-        userName = this.userName.orEmpty()
     )
 }
 

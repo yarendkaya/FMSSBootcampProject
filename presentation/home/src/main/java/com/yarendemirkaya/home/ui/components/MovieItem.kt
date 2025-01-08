@@ -75,15 +75,12 @@ fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Uni
                     modifier = Modifier
                         .padding(8.dp),
                     color = Color.White, fontFamily = FontFamily(
-                        Font(R.font.roboto_bold)
-                    )
-                )
+                        Font(R.font.roboto_bold)))
                 Icon(
                     painter = painterResource(id = R.drawable.star_svgrepo_com),
                     contentDescription = null,
                     tint = Color.Unspecified,
-                    modifier = Modifier.padding(end = 2.dp, bottom = 3.dp)
-                )
+                    modifier = Modifier.padding(end = 2.dp, bottom = 3.dp))
             }
         }
         Column(
@@ -112,8 +109,7 @@ fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Uni
                 color = Color.White,
                 fontFamily = FontFamily(
                     Font(R.font.roboto_bold)
-                )
-            )
+                ))
             AddCartButton(onCartClick)
         }
     }

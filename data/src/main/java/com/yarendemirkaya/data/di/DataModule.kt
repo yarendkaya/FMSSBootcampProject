@@ -1,7 +1,9 @@
 package com.yarendemirkaya.data.di
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.yarendemirkaya.data.datasource.local.MovieDAO
 import com.yarendemirkaya.data.datasource.local.MovieDatabase
 import com.yarendemirkaya.data.datasource.remote.MovieApi
 import com.yarendemirkaya.data.repo.MovieRepoImpl
@@ -47,9 +49,22 @@ object DataModule {
 
     @Provides
     fun provideMovieRepository(
-        database: MovieDatabase,
+        dao: MovieDAO,
         api: MovieApi
     ): MovieRepository {
-        return MovieRepoImpl(database, api)
+        return MovieRepoImpl(dao, api)
     }
+
+    @Provides
+    @Singleton
+    fun provideBlossomDao(database: MovieDatabase): MovieDAO {
+        return database.getMovieDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideContext(application: Application): Context {
+        return application.applicationContext
+    }
+
 }

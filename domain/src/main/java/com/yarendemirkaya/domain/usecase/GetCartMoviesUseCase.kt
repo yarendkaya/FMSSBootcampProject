@@ -6,7 +6,7 @@ import com.yarendemirkaya.domain.repo.MovieRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetCartMoviesUseCase(private val movieRepository: MovieRepository) {
-    suspend operator fun invoke(userName: String): Flow<ResponseState<List<MovieCartModel>>> {
-        return movieRepository.getMovieCart(userName)
+    suspend operator fun invoke(): Flow<ResponseState<List<MovieCartModel>>> {
+        return movieRepository.getMovieCart()
     }
 }
