@@ -1,13 +1,9 @@
 package com.yarendemirkaya.data.datasource.model.response
 
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.yarendemirkaya.data.db.entity.PersonEntity
 import com.yarendemirkaya.domain.model.MovieModel
-import com.yarendemirkaya.domain.model.SamplePerson
 
-@Entity(tableName = "movie_table")
 data class Movie(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
@@ -32,20 +28,6 @@ data class Movie(
 
 fun Movie.toDomainModel(): MovieModel {
     return MovieModel(
-        id = this.id,
-        name = this.name,
-        image = this.image,
-        price = this.price,
-        category = this.category,
-        rating = this.rating,
-        year = this.year,
-        director = this.director,
-        description = this.description
-    )
-}
-
-fun MovieModel.toDataModel(): Movie {
-    return Movie(
         id = this.id,
         name = this.name,
         image = this.image,

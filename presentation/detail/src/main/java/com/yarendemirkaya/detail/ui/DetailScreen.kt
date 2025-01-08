@@ -1,5 +1,6 @@
 package com.yarendemirkaya.detail.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,19 +33,19 @@ import androidx.navigation.NavController
 import com.skydoves.landscapist.glide.GlideImage
 import com.yarendemirkaya.detail.R
 import com.yarendemirkaya.detail.ui.components.ImdbRatingView
+import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.model.MovieModel
+import com.yarendemirkaya.domain.model.toInsertMovieModel
 import com.yarendemirkaya.home.ui.components.AddCartButton
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun DetailScreen(
     movie: MovieModel,
-    viewModel: DetailViewModel, navController: NavController
+    viewModel: DetailViewModel, navController: NavController,
+    onAddToCartClick: (InsertMovieModel) -> Unit = {},
 ) {
-    MovieImage(movie, navController)
-}
 
-@Composable
-fun MovieImage(movie: MovieModel, navController: NavController) {
     val image = "http://kasimadalan.pe.hu/movies/images/${movie.image}"
     Column(
         modifier = Modifier
@@ -53,7 +55,7 @@ fun MovieImage(movie: MovieModel, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(720.dp)
+                .height(LocalConfiguration.current.screenHeightDp.dp / 1.3f)
         ) {
             GlideImage(
                 image,
@@ -110,13 +112,20 @@ fun MovieImage(movie: MovieModel, navController: NavController) {
                 }
             }
             Icon(
-                painter = painterResource(id = R.drawable.ic_fav),
+                painter = painterResource(id = if (viewModel.uiState.value.isFavorited) R.drawable.ic_fav_filled else R.drawable.ic_fav),
                 tint = Color.White,
                 contentDescription = "Favorite",
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(top = 32.dp, end = 24.dp)
                     .size(40.dp)
+                    .clickable(onClick = {
+                        if (viewModel.uiState.value.isFavorited) {
+                            viewModel.deleteMovieFromFavorites(movie)
+                        } else {
+                            viewModel.addMovieToFavorites(movie)
+                        }
+                    })
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_back),
@@ -132,12 +141,14 @@ fun MovieImage(movie: MovieModel, navController: NavController) {
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        MovieDetail(movie)
+        MovieDetail(movie, onCartClick = {
+            viewModel.addMovieToCart(movie.toInsertMovieModel())
+        })
     }
 }
 
 @Composable
-fun MovieDetail(movie: MovieModel) {
+fun MovieDetail(movie: MovieModel, onCartClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -163,7 +174,9 @@ fun MovieDetail(movie: MovieModel) {
                 text = "Price: ${movie.price} USD", color = Color((0xFFFFA500)),
                 fontSize = 25.sp
             )
-            AddCartButton {}
+            AddCartButton(onCartClick = {
+                onCartClick()
+            })
         }
     }
 }

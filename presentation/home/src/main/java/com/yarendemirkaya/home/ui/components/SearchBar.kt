@@ -14,14 +14,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yarendemirkaya.home.R
 
 @Composable
 fun CustomSearchBar(onSearchQueryChange: (String) -> Unit) {
     var searchQuery = remember { mutableStateOf("") }
 
-    TextField(
-        value = searchQuery.value,
+    TextField(value = searchQuery.value,
         onValueChange = {
             searchQuery.value = it
             onSearchQueryChange(it)

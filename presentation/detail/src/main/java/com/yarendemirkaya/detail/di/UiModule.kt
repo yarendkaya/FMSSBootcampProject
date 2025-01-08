@@ -3,6 +3,8 @@ package com.yarendemirkaya.detail.di
 import com.yarendemirkaya.detail.ui.DetailViewModel
 import com.yarendemirkaya.domain.repo.MovieRepository
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
+import com.yarendemirkaya.domain.usecase.favorites.DeleteFavoriteUseCase
+import com.yarendemirkaya.domain.usecase.favorites.InsertFavoriteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,8 +17,10 @@ object DetailUIModule {
 
     @Provides
     fun provideDetailViewModel(
-        insertMovieUseCase: InsertMovieUseCase
+        insertMovieUseCase: InsertMovieUseCase,
+        insertFavoriteUseCase: InsertFavoriteUseCase,
+        deleteFavoriteUseCase: DeleteFavoriteUseCase
     ): DetailViewModel {
-        return DetailViewModel(insertMovieUseCase)
+        return DetailViewModel(insertMovieUseCase, insertFavoriteUseCase, deleteFavoriteUseCase)
     }
 }

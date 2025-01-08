@@ -22,6 +22,7 @@ android {
         }
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -59,6 +60,7 @@ dependencies {
     implementation(project(":presentation:home"))
     implementation(project(":presentation:detail"))
     implementation(project(":presentation:cart"))
+    implementation(project(":presentation:favorites"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

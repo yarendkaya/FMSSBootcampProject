@@ -24,25 +24,18 @@ import com.yarendemirkaya.domain.model.MovieModel
 @Composable
 fun MovieGrid(
     movies: List<MovieModel>,
-    categories: List<String>,
     navController: NavController,
-    onSearchQueryChange: (String) -> Unit = {},
-    onCartClick: (InsertMovieModel) -> Unit
+    onCartClick: (InsertMovieModel) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
-            .fillMaxSize()
             .background(Color.Black)
             .padding(bottom = 88.dp),
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
-
-        item(span = { GridItemSpan(2) }) {
-            HeaderSection(categories, onSearchQueryChange)
-        }
 
         items(movies) { movie ->
             MovieItem(
@@ -53,7 +46,6 @@ fun MovieGrid(
                 },
                 onCartClick = {
                     val insertMovieModel = InsertMovieModel(
-                        id = movie.id,
                         name = movie.name,
                         image = movie.image,
                         price = movie.price,
@@ -63,7 +55,6 @@ fun MovieGrid(
                         director = movie.director,
                         description = movie.description,
                         orderAmount = 1,
-                        userName = null
                     )
                     onCartClick(insertMovieModel)
                 }
@@ -72,17 +63,3 @@ fun MovieGrid(
     }
 }
 
-@Composable
-fun HeaderSection(
-    categories: List<String>,
-    onSearchQueryChange: (String) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        CustomTopAppBar()
-        CustomSearchBar(onSearchQueryChange = onSearchQueryChange)
-        Categories(categories)
-    }
-}

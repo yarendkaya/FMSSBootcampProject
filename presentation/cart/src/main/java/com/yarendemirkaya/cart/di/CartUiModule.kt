@@ -4,10 +4,12 @@ import com.yarendemirkaya.cart.ui.CartViewModel
 import com.yarendemirkaya.domain.repo.MovieRepository
 import com.yarendemirkaya.domain.usecase.DeleteMovieUseCase
 import com.yarendemirkaya.domain.usecase.GetCartMoviesUseCase
+import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -25,8 +27,8 @@ object CartUiModule {
 
     @Provides
     fun provideCartViewModel(
-        getCartMoviesUseCase: GetCartMoviesUseCase,deleteMovieUseCase: DeleteMovieUseCase
+        getCartMoviesUseCase: GetCartMoviesUseCase, deleteMovieUseCase: DeleteMovieUseCase,insertMovieUseCase: InsertMovieUseCase
     ): CartViewModel {
-        return CartViewModel(getCartMoviesUseCase, deleteMovieUseCase)
+        return CartViewModel(getCartMoviesUseCase, deleteMovieUseCase, insertMovieUseCase)
     }
 }
