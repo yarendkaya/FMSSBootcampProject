@@ -55,7 +55,6 @@ android {
 dependencies {
 
     implementation(project(":data"))
-    implementation(project(":presentation:sample"))
     implementation(project(":domain"))
     implementation(project(":presentation:home"))
     implementation(project(":presentation:detail"))

@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yarendemirkaya.core.ResponseState
 import com.yarendemirkaya.domain.model.CartResponseModel
-import com.yarendemirkaya.domain.model.FavMovieModel
 import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.model.toFavMovieModel
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
+import com.yarendemirkaya.domain.usecase.favorites.CheckIfMovieFavoritedUseCase
 import com.yarendemirkaya.domain.usecase.favorites.DeleteFavoriteUseCase
 import com.yarendemirkaya.domain.usecase.favorites.InsertFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +23,8 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val insertMovieUseCase: InsertMovieUseCase,
     private val insertFavoriteUseCase: InsertFavoriteUseCase,
-    private val deleteFavoriteUseCase: DeleteFavoriteUseCase
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
+    private val checkIfMovieFavoritedUseCase: CheckIfMovieFavoritedUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -64,6 +65,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+
     fun deleteMovieFromFavorites(movie: MovieModel) {
         viewModelScope.launch {
             deleteFavoriteUseCase.invoke(movie.toFavMovieModel())
@@ -81,6 +83,17 @@ class DetailViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isFavorited = true
+                )
+            }
+        }
+    }
+
+    fun checkIfMovieIsFavorited(name: String) {
+        viewModelScope.launch {
+            val isFavorited = checkIfMovieFavoritedUseCase.invoke(name)
+            _uiState.update {
+                it.copy(
+                    isFavorited = isFavorited
                 )
             }
         }

@@ -1,7 +1,6 @@
 package com.yarendemirkaya.data.repo
 
 import com.yarendemirkaya.core.ResponseState
-import com.yarendemirkaya.data.datasource.local.FavMovie
 import com.yarendemirkaya.data.datasource.local.MovieDAO
 import com.yarendemirkaya.data.datasource.local.toDataModel
 import com.yarendemirkaya.data.datasource.local.toDomainModel
@@ -39,6 +38,10 @@ class MovieRepoImpl @Inject constructor(
             emit(ResponseState.Error(e.message ?: "An error occurred"))
         }
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun checkIfMovieIsFavorited(name:String): Boolean {
+        return dao.checkIfMovieIsFavorited(name)
+    }
 
 
     override suspend fun insertMovie(movieInsert: InsertMovieModel): Flow<ResponseState<CartResponseModel>> =
@@ -135,5 +138,6 @@ class MovieRepoImpl @Inject constructor(
     override suspend fun deleteFavoriteMovie(favMovie: FavMovieModel) {
         dao.deleteFavoriteMovie(favMovie.toDataModel())
     }
+
 
 }

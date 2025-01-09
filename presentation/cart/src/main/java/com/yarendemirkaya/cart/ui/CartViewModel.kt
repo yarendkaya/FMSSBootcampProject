@@ -65,6 +65,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
+
     private fun handleLastItemDelete() {
         if (_uiState.value.movies.size == 1 && _uiState.value.isMovieDeleted && _uiState.value.movies.first().orderAmount == 1) {
             _uiState.update {
@@ -74,7 +75,6 @@ class CartViewModel @Inject constructor(
             }
         }
     }
-
 
     fun getCartMovies() {
         viewModelScope.launch {
@@ -190,5 +190,5 @@ data class UiState(
     val isLoading: Boolean = false, // ?
     val movies: List<MovieCartUiModel> = emptyList(),
     val error: String? = null,
-    val isMovieDeleted: Boolean = false
+    val isMovieDeleted: Boolean = false,
 )

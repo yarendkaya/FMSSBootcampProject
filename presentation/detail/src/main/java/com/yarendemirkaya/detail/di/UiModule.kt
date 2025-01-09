@@ -1,8 +1,8 @@
 package com.yarendemirkaya.detail.di
 
 import com.yarendemirkaya.detail.ui.DetailViewModel
-import com.yarendemirkaya.domain.repo.MovieRepository
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
+import com.yarendemirkaya.domain.usecase.favorites.CheckIfMovieFavoritedUseCase
 import com.yarendemirkaya.domain.usecase.favorites.DeleteFavoriteUseCase
 import com.yarendemirkaya.domain.usecase.favorites.InsertFavoriteUseCase
 import dagger.Module
@@ -19,8 +19,14 @@ object DetailUIModule {
     fun provideDetailViewModel(
         insertMovieUseCase: InsertMovieUseCase,
         insertFavoriteUseCase: InsertFavoriteUseCase,
-        deleteFavoriteUseCase: DeleteFavoriteUseCase
+        deleteFavoriteUseCase: DeleteFavoriteUseCase,
+        checkIfMovieFavoritedUseCase: CheckIfMovieFavoritedUseCase
     ): DetailViewModel {
-        return DetailViewModel(insertMovieUseCase, insertFavoriteUseCase, deleteFavoriteUseCase)
+        return DetailViewModel(
+            insertMovieUseCase,
+            insertFavoriteUseCase,
+            deleteFavoriteUseCase,
+            checkIfMovieFavoritedUseCase
+        )
     }
 }

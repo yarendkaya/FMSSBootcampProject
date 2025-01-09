@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -43,8 +44,11 @@ import com.yarendemirkaya.home.ui.components.AddCartButton
 fun DetailScreen(
     movie: MovieModel,
     viewModel: DetailViewModel, navController: NavController,
-    onAddToCartClick: (InsertMovieModel) -> Unit = {},
 ) {
+
+    LaunchedEffect(key1 = true) {
+        viewModel.checkIfMovieIsFavorited(movie.name)
+    }
 
     val image = "http://kasimadalan.pe.hu/movies/images/${movie.image}"
     Column(

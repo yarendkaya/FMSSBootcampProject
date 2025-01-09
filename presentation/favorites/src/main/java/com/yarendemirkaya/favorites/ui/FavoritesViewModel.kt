@@ -21,6 +21,7 @@ class FavoritesViewModel @Inject constructor(
     private val getFavoritesUseCase: GetFavoritesUseCase,
     private val insertMovieUseCase: InsertMovieUseCase
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 

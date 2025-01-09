@@ -30,6 +30,7 @@ fun NavGraph(
         composable("home") {
             HomeScreen(viewModel = viewModel, navController)
         }
+        
         composable(
             route = "detail/{movie}",
             arguments = listOf(navArgument("movie") { type = NavType.StringType })

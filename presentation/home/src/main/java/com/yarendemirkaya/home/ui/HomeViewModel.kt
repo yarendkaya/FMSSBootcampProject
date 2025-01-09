@@ -22,6 +22,7 @@ class HomeViewModel @Inject constructor(
     private val insertMovieUseCase: InsertMovieUseCase
 ) : ViewModel() {
 
+
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
@@ -35,22 +36,12 @@ class HomeViewModel @Inject constructor(
 
     private fun filterMoviesBySearchQuery(query: String) {
         viewModelScope.launch {
-            getAllUsersCase().collect { response ->
-                when (response) {
-                    is ResponseState.Success -> {
-                        val allMovies = response.data
-                        val filteredMovies = if (query.isEmpty()) {
-                            allMovies
-                        } else {
-                            allMovies.filter { it.name.contains(query, ignoreCase = true) }
-                        }
-                        _uiState.update { uiState ->
-                            uiState.copy(movies = filteredMovies)
-                        }
+            _uiState.update { uiState ->
+                uiState.copy(
+                    filteredMovies = uiState.movies.filter { movie ->
+                        movie.name.contains(query, ignoreCase = true)
                     }
-                    else -> {
-                    }
-                }
+                )
             }
         }
     }
@@ -122,6 +113,7 @@ class HomeViewModel @Inject constructor(
                                 movies =
 //                                filteredMovies
                                 it.data,
+                                filteredMovies = it.data,
                                 categories = newCategories,
                                 isLoading = false,
                             )
@@ -136,7 +128,6 @@ class HomeViewModel @Inject constructor(
                             )
                         }
                     }
-
                     else -> {}
                 }
             }
@@ -146,7 +137,12 @@ class HomeViewModel @Inject constructor(
     fun filterMoviesByCategory(category: String) {
         val allMovies = _uiState.value.movies
         _uiState.value = _uiState.value.copy(
-            movies = allMovies.filter { it.category == category }
+            filteredMovies = if (category == "All") {
+                allMovies
+            } else {
+                allMovies.filter { it.category == category }
+            },
+            selectedCategory = category
         )
     }
 
@@ -177,5 +173,6 @@ data class UiState(
     val error: String? = null,
     val selectedCategory: String = "All",
     val insertMovieResult: CartResponseModel? = null,
-    val searchQuery: String = ""
+    val searchQuery: String = "",
+    val filteredMovies: List<MovieModel> = emptyList()
 )

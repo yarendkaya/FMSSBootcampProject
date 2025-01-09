@@ -9,5 +9,5 @@ java {
 }
 dependencies {
     implementation(libs.kotlin.coroutines)
-    implementation(project(":core"))
+   implementation(project(":core"))
 }
