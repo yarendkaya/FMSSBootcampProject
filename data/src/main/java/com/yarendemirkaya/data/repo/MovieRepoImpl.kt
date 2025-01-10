@@ -1,7 +1,6 @@
 package com.yarendemirkaya.data.repo
 
 import com.yarendemirkaya.core.ResponseState
-import com.yarendemirkaya.data.datasource.local.FavMovie
 import com.yarendemirkaya.data.datasource.local.MovieDAO
 import com.yarendemirkaya.data.datasource.local.toDataModel
 import com.yarendemirkaya.data.datasource.local.toDomainModel
@@ -23,6 +22,7 @@ class MovieRepoImpl @Inject constructor(
     private val dao: MovieDAO,
     private val api: MovieApi
 ) : MovieRepository {
+
     override suspend fun getAllMovies(): Flow<ResponseState<List<MovieModel>>> = flow {
         emit(ResponseState.Loading)
         try {
@@ -39,6 +39,10 @@ class MovieRepoImpl @Inject constructor(
             emit(ResponseState.Error(e.message ?: "An error occurred"))
         }
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun checkIfMovieIsFavorited(name: String): Boolean {
+        return dao.checkIfMovieIsFavorited(name)
+    }
 
 
     override suspend fun insertMovie(movieInsert: InsertMovieModel): Flow<ResponseState<CartResponseModel>> =
@@ -71,8 +75,7 @@ class MovieRepoImpl @Inject constructor(
         }
 
 
-    override suspend fun getMovieCart(): Flow<ResponseState<List<MovieCartModel>>> =
-        flow {
+    override suspend fun getMovieCart(): Flow<ResponseState<List<MovieCartModel>>> = flow {
             emit(ResponseState.Loading)
             try {
                 val response = api.getMovieCart("yaren_demirkaya")
@@ -91,27 +94,24 @@ class MovieRepoImpl @Inject constructor(
             }
         }
 
-    override suspend fun deleteMovie(
-        cartId: Int,
-    ): Flow<ResponseState<CartResponseModel>> =
-        flow {
-            emit(ResponseState.Loading)
-            try {
-                val response = api.deleteMovie(cartId, "yaren_demirkaya")
-                if (response.isSuccessful) {
-                    val cartResponse = response.body()?.toDomainModel()
-                    if (cartResponse != null) {
-                        emit(ResponseState.Success(cartResponse))
-                    } else {
-                        emit(ResponseState.Error("No data found"))
-                    }
+    override suspend fun deleteMovie(cartId: Int): Flow<ResponseState<CartResponseModel>> = flow {
+        emit(ResponseState.Loading)
+        try {
+            val response = api.deleteMovie(cartId, "yaren_demirkaya")
+            if (response.isSuccessful) {
+                val cartResponse = response.body()?.toDomainModel()
+                if (cartResponse != null) {
+                    emit(ResponseState.Success(cartResponse))
                 } else {
                     emit(ResponseState.Error("No data found"))
                 }
-            } catch (e: Exception) {
-                emit(ResponseState.Error(e.message ?: "An error occurred"))
+            } else {
+                emit(ResponseState.Error("No data found"))
             }
+        } catch (e: Exception) {
+            emit(ResponseState.Error(e.message ?: "An error occurred"))
         }
+    }
 
 
     override suspend fun getAllFavoriteMovies(): Flow<ResponseState<List<FavMovieModel>>> = flow {

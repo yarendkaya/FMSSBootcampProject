@@ -9,31 +9,21 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.navigation.Navigation
-import androidx.navigation.compose.*
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.yarendemirkaya.cart.ui.CartViewModel
 import com.yarendemirkaya.detail.ui.DetailViewModel
 import com.yarendemirkaya.favorites.ui.FavoritesViewModel
-import com.yarendemirkaya.fmssbootcampproject.R
 import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.NavGraph
-import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.SampleNav
 import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.bottombar.BottomBarItem
 import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.bottombar.DynamicBottomBar
 import com.yarendemirkaya.fmssbootcampproject.ui.theme.FMSSBootcampProjectTheme
 import com.yarendemirkaya.home.ui.HomeViewModel
-import com.yarendemirkaya.home.ui.components.CustomTopAppBar
-import com.yarendemirkaya.sample.ui.FloatingActionBtn
-import com.yarendemirkaya.sample.ui.SampleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    //    private val viewModel: SampleViewModel by viewModels()
     private val viewModel: HomeViewModel by viewModels()
     private val detailViewModel: DetailViewModel by viewModels()
     private val cartViewModel: CartViewModel by viewModels()
@@ -72,20 +62,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-//                    floatingActionButton = {
-//                        FloatingActionBtn(
-//                            navController = navController
-//                        )
-//                    }
                 ) { paddingValues ->
-
-//                    SampleNav(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .padding(paddingValues),
-//                        viewModel = viewModel,
-//                        navController = navController
-//                    )
                     NavGraph(
                         modifier = Modifier
                             .fillMaxSize()

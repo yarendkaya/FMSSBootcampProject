@@ -1,10 +1,10 @@
 package com.yarendemirkaya.home.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,8 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
 import androidx.navigation.NavController
+import com.yarendemirkaya.base.ui.LoadingIndicator
 import com.yarendemirkaya.home.ui.components.Categories
 import com.yarendemirkaya.home.ui.components.CustomSearchBar
 import com.yarendemirkaya.home.ui.components.CustomTopAppBar
@@ -29,40 +29,41 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
         viewModel.fetchMovies()
     }
 
-    when {
-        viewState.isLoading -> {
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .padding(4.dp)
+    ) {
 
-        viewState.error != null -> {
-            Text(text = viewState.error!!)
-        }
+        HeaderSection(
+            viewState.categories.toList(),
+            onSearchQueryChange = { query ->
+                viewModel.onSearchTextChange(query)
+            },
+            onCategorySelected = { category ->
+                viewModel.filterMoviesByCategory(category)
+            },
+            onFilterClick = { filter ->
+                when (filter) {
+                    "Fiyata Göre Artan" -> viewModel.generalFilter("price", true)
+                    "Fiyata Göre Azalan" -> viewModel.generalFilter("price", false)
+                    "Puana Göre Artan" -> viewModel.generalFilter("rating", true)
+                    "Puana Göre Azalan" -> viewModel.generalFilter("rating", false)
+                }
+            })
+        when {
+            viewState.isLoading -> {
+                LoadingIndicator()
+            }
 
-        viewState.movies.isNotEmpty() -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                HeaderSection(
-                    viewState.categories.toList(),
-                    onSearchQueryChange = { query ->
-                            viewModel.onSearchTextChange(query)
-                    },
-                    onCategorySelected = { category ->
-                        viewModel.filterMoviesByCategory(category)
-                    },
-                    onFilterClick = { filter ->
-                        when (filter) {
-                            "Fiyata Göre Artan" -> viewModel.generalFilter("price", true)
-                            "Fiyata Göre Azalan" -> viewModel.generalFilter("price", false)
-                            "Puana Göre Artan" -> viewModel.generalFilter("rating", true)
-                            "Puana Göre Azalan" -> viewModel.generalFilter("rating", false)
-                        }
-                    })
+            viewState.error != null -> {
+                Text(text = viewState.error!!)
+            }
 
+            viewState.movies.isNotEmpty() -> {
                 MovieGrid(
-                    viewState.movies,
+                    viewState.filteredMovies,
                     navController,
                     onCartClick = { movie ->
                         viewModel.insertMovie(movie)

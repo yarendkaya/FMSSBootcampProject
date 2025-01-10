@@ -55,7 +55,6 @@ android {
 dependencies {
 
     implementation(project(":data"))
-    implementation(project(":presentation:sample"))
     implementation(project(":domain"))
     implementation(project(":presentation:home"))
     implementation(project(":presentation:detail"))
@@ -84,6 +83,6 @@ dependencies {
     //navigation
     implementation(libs.compose.navigation)
     implementation(libs.androidx.runtime)
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(libs.gson)
 
 }

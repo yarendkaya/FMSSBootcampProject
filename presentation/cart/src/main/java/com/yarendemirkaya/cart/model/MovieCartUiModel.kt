@@ -1,6 +1,5 @@
 package com.yarendemirkaya.cart.model
 
-import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.model.MovieModel
 
 data class MovieCartUiModel(

@@ -26,7 +26,7 @@ import com.yarendemirkaya.cart.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomCartTopAppBar() {
+fun CustomCartTopAppBar(onItemClicked: () -> Unit) {
     TopAppBar(
         title = {
             Row(
@@ -49,7 +49,9 @@ fun CustomCartTopAppBar() {
                 Icon(
                     modifier = Modifier
                         .size(30.dp)
-                        .clickable { },
+                        .clickable {
+                            onItemClicked()
+                        },
                     painter = painterResource(R.drawable.delete_svgrepo_com__1_),
                     contentDescription = null,
                     tint = Color.Unspecified,

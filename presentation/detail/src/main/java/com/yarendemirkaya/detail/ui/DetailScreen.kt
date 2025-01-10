@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,20 +32,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.skydoves.landscapist.glide.GlideImage
+import com.yarendemirkaya.base.ui.AddCartButton
 import com.yarendemirkaya.detail.R
 import com.yarendemirkaya.detail.ui.components.ImdbRatingView
-import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.model.toInsertMovieModel
-import com.yarendemirkaya.home.ui.components.AddCartButton
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun DetailScreen(
     movie: MovieModel,
     viewModel: DetailViewModel, navController: NavController,
-    onAddToCartClick: (InsertMovieModel) -> Unit = {},
 ) {
+
+    LaunchedEffect(key1 = true) {
+        viewModel.checkIfMovieIsFavorited(movie.name)
+    }
+
 
     val image = "http://kasimadalan.pe.hu/movies/images/${movie.image}"
     Column(
@@ -142,7 +146,9 @@ fun DetailScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
         MovieDetail(movie, onCartClick = {
-            viewModel.addMovieToCart(movie.toInsertMovieModel())
+            viewModel.addMovieToCart(
+                movie.toInsertMovieModel()
+            )
         })
     }
 }

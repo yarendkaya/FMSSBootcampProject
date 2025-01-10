@@ -5,8 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.yarendemirkaya.data.datasource.model.response.Movie
-import com.yarendemirkaya.domain.model.FavMovieModel
 
 @Dao
 interface MovieDAO {
@@ -19,5 +17,9 @@ interface MovieDAO {
 
     @Delete
     suspend fun deleteFavoriteMovie(favMovie: FavMovie)
+
+    suspend fun checkIfMovieIsFavorited(name: String): Boolean {
+        return getAllFavoriteMovies().any { it.name == name }
+    }
 
 }

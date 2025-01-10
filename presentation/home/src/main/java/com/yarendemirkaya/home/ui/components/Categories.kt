@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,7 +48,6 @@ fun Categories(
             modifier = Modifier
                 .border(2.dp, Color(0xFFFFA500), shape = RoundedCornerShape(4.dp))
                 .padding(4.dp)
-            //.clip(RoundedCornerShape(4.dp))
         ) {
             DropDownMenu(onFilterClick = onFilterClick)
         }

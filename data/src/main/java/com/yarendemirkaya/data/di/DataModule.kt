@@ -57,7 +57,7 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideBlossomDao(database: MovieDatabase): MovieDAO {
+    fun provideMovieDao(database: MovieDatabase): MovieDAO {
         return database.getMovieDao()
     }
 

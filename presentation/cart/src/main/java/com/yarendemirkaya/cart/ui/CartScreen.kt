@@ -24,6 +24,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,8 +36,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
+import com.yarendemirkaya.base.ui.LoadingIndicator
+import com.yarendemirkaya.cart.R
 import com.yarendemirkaya.cart.ui.components.CartItem
 import com.yarendemirkaya.cart.ui.components.CustomCartTopAppBar
+import com.yarendemirkaya.cart.ui.components.Information
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -46,13 +51,16 @@ import kotlinx.coroutines.launch
 fun CartScreen(viewModel: CartViewModel) {
     val viewState by viewModel.uiState.collectAsState()
 
+
     LaunchedEffect(key1 = true) {
         viewModel.getCartMovies()
     }
 
     Scaffold(
         topBar = {
-            CustomCartTopAppBar()
+            CustomCartTopAppBar(onItemClicked = {
+                viewModel.deleteAllMovies()
+            })
         },
         content = { paddingValues ->
             Column(
@@ -63,12 +71,26 @@ fun CartScreen(viewModel: CartViewModel) {
             ) {
                 when {
                     viewState.isLoading -> {
+                        LoadingIndicator()
                     }
 
                     viewState.error != null -> {
                     }
 
                     viewState.movies.isNotEmpty() -> {
+                        val showDialog = remember { mutableStateOf(false) }
+
+                        if (showDialog.value) {
+                            Information(
+                                onConfirm = {
+                                    showDialog.value = false
+                                },
+                                onDismiss = {
+                                    showDialog.value = false
+                                }
+                            )
+                        }
+
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -126,8 +148,12 @@ fun CartScreen(viewModel: CartViewModel) {
 
                                 Button(
                                     onClick = {
+                                        showDialog.value = true
                                     },
-                                    modifier = Modifier.weight(1.2f).fillMaxHeight().background(Color(0xFF151515)),
+                                    modifier = Modifier
+                                        .weight(1.2f)
+                                        .fillMaxHeight()
+                                        .background(Color(0xFF151515)),
                                     shape = RectangleShape,
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = Color(0xFFFFA500),
@@ -148,7 +174,7 @@ fun CartScreen(viewModel: CartViewModel) {
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Cart is empty \nPlease add a movie",
+                                text = "Your cart is empty",
                                 color = Color.White,
                                 fontSize = 20.sp
                             )

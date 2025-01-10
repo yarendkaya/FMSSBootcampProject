@@ -1,11 +1,10 @@
 package com.yarendemirkaya.favorites.di
 
 import com.yarendemirkaya.domain.repo.MovieRepository
-import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
+import com.yarendemirkaya.domain.usecase.favorites.CheckIfMovieFavoritedUseCase
 import com.yarendemirkaya.domain.usecase.favorites.DeleteFavoriteUseCase
 import com.yarendemirkaya.domain.usecase.favorites.GetFavoritesUseCase
 import com.yarendemirkaya.domain.usecase.favorites.InsertFavoriteUseCase
-import com.yarendemirkaya.favorites.ui.FavoritesViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +30,10 @@ object FavoritesUiModule {
         return InsertFavoriteUseCase(movieRepository)
     }
 
+    @Provides
+    fun provideCheckIfMovieFavoritedUseCase(movieRepository: MovieRepository): CheckIfMovieFavoritedUseCase {
+        return CheckIfMovieFavoritedUseCase(movieRepository)
+    }
 //    @Provides
 //    fun provideFavoritesViewModel(
 //        getFavoritesUseCase: GetFavoritesUseCase,insertMovieUseCase: InsertMovieUseCase): FavoritesViewModel {

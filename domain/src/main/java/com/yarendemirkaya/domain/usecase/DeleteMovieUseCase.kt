@@ -2,7 +2,6 @@ package com.yarendemirkaya.domain.usecase
 
 import com.yarendemirkaya.core.ResponseState
 import com.yarendemirkaya.domain.model.CartResponseModel
-import com.yarendemirkaya.domain.model.DeleteMovieRequestModel
 import com.yarendemirkaya.domain.repo.MovieRepository
 import kotlinx.coroutines.flow.Flow
 
