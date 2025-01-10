@@ -54,8 +54,6 @@ class CartViewModel @Inject constructor(
                             )
                         }
                     }
-
-                    ResponseState.Loading -> TODO()
                 }
             }
         }
@@ -97,7 +95,6 @@ class CartViewModel @Inject constructor(
                         }
                     }
 
-                    ResponseState.Loading -> TODO()
                 }
             }
         }
@@ -164,7 +161,6 @@ class CartViewModel @Inject constructor(
                     }
                 }
 
-                ResponseState.Loading -> TODO()
             }
         }
     }

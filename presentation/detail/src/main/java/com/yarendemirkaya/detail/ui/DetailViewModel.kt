@@ -60,11 +60,9 @@ class DetailViewModel @Inject constructor(
                         )
                     }
                 }
-                ResponseState.Loading -> TODO()
             }
         }
     }
-
 
     fun deleteMovieFromFavorites(movie: MovieModel) {
         viewModelScope.launch {

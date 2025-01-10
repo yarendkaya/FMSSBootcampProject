@@ -3,6 +3,7 @@ package com.yarendemirkaya.fmssbootcampproject.ui.navgraph
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -93,8 +94,22 @@ fun NavGraph(
         }
 
         composable("favorites") {
+            val viewModel = hiltViewModel<FavoritesViewModel>()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+
+            LaunchedEffect(Unit) {
+                viewModel.getFavorites()
+            }
+
             FavoritesScreen(
-                navController = navController
+                uiState = uiState,
+                uiEffect = uiEffect,
+                onAction = viewModel::onAction,
+                onNavigateToDetailFromFavorites = { movie ->
+                    val movieJson = Uri.encode(Gson().toJson(movie))
+                    navController.navigate("detail/$movieJson")
+                }
             )
         }
     }

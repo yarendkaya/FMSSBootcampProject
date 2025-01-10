@@ -3,14 +3,16 @@ package com.yarendemirkaya.favorites.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yarendemirkaya.core.ResponseState
-import com.yarendemirkaya.domain.model.CartResponseModel
-import com.yarendemirkaya.domain.model.FavMovieModel
 import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
 import com.yarendemirkaya.domain.usecase.favorites.GetFavoritesUseCase
+import com.yarendemirkaya.home.ui.UiEffectFavorites
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,55 +27,61 @@ class FavoritesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    private val _uiEffect = MutableSharedFlow<UiEffectFavorites>()
+    val uiEffect: SharedFlow<UiEffectFavorites> = _uiEffect.asSharedFlow()
+
+
+    fun onAction(uiAction: UiAction) {
+        viewModelScope.launch {
+            when (uiAction) {
+                is UiAction.OnAddToCartClick -> insertMovie(uiAction.movie)
+                is UiAction.OnMovieClick -> _uiEffect.emit(UiEffectFavorites.NavigateToDetailFromFavorites(uiAction.movie))
+            }
+        }
+    }
+
 
     fun getFavorites() {
         viewModelScope.launch {
-            _uiState.value = UiState(isLoading = true)
-            getFavoritesUseCase().collect {
-                when (it) {
+            getFavoritesUseCase().collect { response ->
+                when (response) {
                     is ResponseState.Success -> {
-                        _uiState.value = UiState(favorites = it.data)
+                        updateUiState {
+                            copy(
+                                isLoading = false,
+                                favorites = response.data,
+                                error = null
+                            )
+                        }
                     }
 
-                    is ResponseState.Error -> {
-                        _uiState.value = UiState(error = it.message)
-                    }
-
-                    ResponseState.Loading -> TODO()
+                    is ResponseState.Error -> TODO()
                 }
             }
         }
     }
 
-    fun insertMovie(insertMovieModel: InsertMovieModel) {
+    private fun insertMovie(insertMovieModel: InsertMovieModel) {
         viewModelScope.launch {
             _uiState.value = UiState(isLoading = true)
             when (val response = insertMovieUseCase(insertMovieModel)) {
                 is ResponseState.Success -> {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            isLoading = false,
-                        )
-                    }
+                    updateUiState { copy(isLoading = false) }
+                    _uiEffect.emit(UiEffectFavorites.ShowToast(response.data))
                 }
 
                 is ResponseState.Error -> {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            error = uiState.error,
-                            isLoading = false
-                        )
-                    }
+                    updateUiState { copy(isLoading = false) }
+                    _uiEffect.emit(UiEffectFavorites.ShowToast(response.message))
                 }
-
-                ResponseState.Loading -> TODO()
             }
         }
     }
+
+    private fun updateUiState(block: UiState.() -> UiState) {
+        _uiState.update(block)
+    }
 }
 
-data class UiState(
-    val isLoading: Boolean = false,
-    val favorites: List<FavMovieModel> = emptyList(),
-    val error: String? = null,
-)
+
+

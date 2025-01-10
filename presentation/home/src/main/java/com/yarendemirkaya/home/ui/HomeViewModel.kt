@@ -67,7 +67,6 @@ class HomeViewModel @Inject constructor(
                     _uiEffect.emit(UiEffect.ShowToast(response.message))
                 }
 
-                ResponseState.Loading -> TODO()
             }
         }
     }
@@ -89,7 +88,6 @@ class HomeViewModel @Inject constructor(
                 }
 
                 is ResponseState.Error -> updateUiState { copy(error = response.message, isLoading = false) }
-                ResponseState.Loading -> TODO()
             }
         }
     }

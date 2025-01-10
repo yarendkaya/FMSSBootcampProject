@@ -1,6 +1,6 @@
 package com.yarendemirkaya.favorites.ui
 
-import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,63 +15,66 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.google.gson.Gson
+import com.yarendemirkaya.base.ui.LoadingIndicator
 import com.yarendemirkaya.base.ui.MovieItem
+import com.yarendemirkaya.base.ui.collectWithLifecycle
+import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.model.toInsertMovieModel
 import com.yarendemirkaya.domain.model.toMovieModel
+import com.yarendemirkaya.home.ui.UiEffectFavorites
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun FavoritesScreen(
-    viewModel: FavoritesViewModel = hiltViewModel(),
-    navController: NavController
+    uiState: UiState,
+    uiEffect: Flow<UiEffectFavorites>,
+    onAction: (UiAction) -> Unit,
+    onNavigateToDetailFromFavorites: (MovieModel) -> Unit,
 ) {
+    val context = LocalContext.current
 
-    LaunchedEffect(key1 = true) {
-        viewModel.getFavorites()
+    uiEffect.collectWithLifecycle {
+        when (it) {
+            is UiEffectFavorites.ShowToast -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+            is UiEffectFavorites.NavigateToDetailFromFavorites -> onNavigateToDetailFromFavorites(it.movie)
+            is UiEffectFavorites.None -> Unit
+        }
     }
-    val viewState by viewModel.uiState.collectAsState()
-
 
     Column(modifier = Modifier.fillMaxSize()) {
         CustomTopAppBar()
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            items(viewState.favorites.size) {
-                MovieItem(
-                    movie = viewState.favorites[it].toMovieModel(),
-                    onItemClick = {
-                        val movieJson =
-                            Uri.encode(Gson().toJson(viewState.favorites[it].toMovieModel()))
-                        navController.navigate("detail/$movieJson")
-                    },
-                    onCartClick = {
-                        viewModel.insertMovie(
-                            viewState.favorites[it].toMovieModel().toInsertMovieModel()
-                        )
-                    })
+        if (uiState.favorites.isNotEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(16.dp)
+            ) {
+                items(uiState.favorites.size) {
+                    MovieItem(
+                        movie = uiState.favorites[it].toMovieModel(),
+                        onItemClick = {
+                            onAction(UiAction.OnMovieClick(uiState.favorites[it].toMovieModel()))
+                        },
+                        onCartClick = {
+                            onAction(UiAction.OnAddToCartClick(uiState.favorites[it].toInsertMovieModel()))
+                        })
+                }
             }
         }
+        if (uiState.isLoading) LoadingIndicator()
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

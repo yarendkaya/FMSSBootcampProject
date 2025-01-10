@@ -27,3 +27,17 @@ fun FavMovieModel.toMovieModel(): MovieModel {
         description = this.description
     )
 }
+
+fun FavMovieModel.toInsertMovieModel(): InsertMovieModel {
+    return InsertMovieModel(
+        name = this.name,
+        image = this.image,
+        price = this.price,
+        category = this.category,
+        rating = this.rating,
+        year = this.year,
+        director = this.director,
+        description = this.description,
+        orderAmount = 1
+    )
+}
