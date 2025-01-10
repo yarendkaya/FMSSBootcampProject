@@ -1,7 +1,6 @@
 package com.yarendemirkaya.home.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,8 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
 import androidx.navigation.NavController
+import com.yarendemirkaya.base.ui.LoadingIndicator
 import com.yarendemirkaya.home.ui.components.Categories
 import com.yarendemirkaya.home.ui.components.CustomSearchBar
 import com.yarendemirkaya.home.ui.components.CustomTopAppBar
@@ -55,6 +54,7 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
             })
         when {
             viewState.isLoading -> {
+                LoadingIndicator()
             }
 
             viewState.error != null -> {

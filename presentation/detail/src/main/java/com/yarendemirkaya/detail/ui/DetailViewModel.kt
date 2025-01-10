@@ -38,7 +38,7 @@ class DetailViewModel @Inject constructor(
                     is ResponseState.Loading -> {
                         _uiState.update {
                             it.copy(
-                                isLoading = true
+                                isLoading = true,
                             )
                         }
                     }
@@ -47,7 +47,7 @@ class DetailViewModel @Inject constructor(
                         _uiState.update { uiState ->
                             uiState.copy(
                                 isLoading = false,
-                                insertMovieResponse = it.data
+                                insertMovieResponse = it.data,
                             )
                         }
                     }
@@ -71,7 +71,7 @@ class DetailViewModel @Inject constructor(
             deleteFavoriteUseCase.invoke(movie.toFavMovieModel())
             _uiState.update {
                 it.copy(
-                    isFavorited = false
+                    isFavorited = false,
                 )
             }
         }
@@ -82,7 +82,7 @@ class DetailViewModel @Inject constructor(
             insertFavoriteUseCase.invoke(movie.toFavMovieModel())
             _uiState.update {
                 it.copy(
-                    isFavorited = true
+                    isFavorited = true,
                 )
             }
         }
@@ -104,7 +104,7 @@ data class UiState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val isFavorited: Boolean = false,
-    val insertMovieResponse: CartResponseModel? = null
+    val insertMovieResponse: CartResponseModel? = null,
 )
 
 

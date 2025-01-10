@@ -62,20 +62,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-//                    floatingActionButton = {
-//                        FloatingActionBtn(
-//                            navController = navController
-//                        )
-//                    }
                 ) { paddingValues ->
-
-//                    SampleNav(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .padding(paddingValues),
-//                        viewModel = viewModel,
-//                        navController = navController
-//                    )
                     NavGraph(
                         modifier = Modifier
                             .fillMaxSize()

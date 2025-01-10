@@ -75,7 +75,6 @@ class FavoritesViewModel @Inject constructor(
                             )
                         }
                     }
-
                     else -> {}
                 }
             }

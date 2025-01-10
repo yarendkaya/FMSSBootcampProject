@@ -10,6 +10,8 @@ import com.yarendemirkaya.domain.usecase.DeleteMovieUseCase
 import com.yarendemirkaya.domain.usecase.GetCartMoviesUseCase
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +23,7 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val getCartMoviesUseCase: GetCartMoviesUseCase,
     private val deleteMovieUseCase: DeleteMovieUseCase,
-    private val insertMovieUseCase: InsertMovieUseCase
-) : ViewModel() {
+    private val insertMovieUseCase: InsertMovieUseCase) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -31,6 +32,7 @@ class CartViewModel @Inject constructor(
     fun deleteMovie(cartId: Int) {
         viewModelScope.launch {
             deleteMovieUseCase(cartId).collect {
+
                 when (it) {
                     is ResponseState.Loading -> {
                         _uiState.update {
@@ -75,6 +77,7 @@ class CartViewModel @Inject constructor(
             }
         }
     }
+
 
     fun getCartMovies() {
         viewModelScope.launch {
@@ -181,6 +184,24 @@ class CartViewModel @Inject constructor(
                         }
                     }
                 }
+            }
+        }
+    }
+
+    fun deleteAllMovies() {
+        viewModelScope.launch {
+            val jobs = uiState.value.movies.map { movie ->
+                async {
+                    movie.cartIdList.forEach { cartId ->
+                        deleteMovie(cartId)
+                    }
+                }
+            }
+            jobs.awaitAll()
+            _uiState.update {
+                it.copy(
+                    movies = emptyList()
+                )
             }
         }
     }

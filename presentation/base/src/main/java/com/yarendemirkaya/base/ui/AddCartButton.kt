@@ -1,19 +1,17 @@
-package com.yarendemirkaya.home.ui.components
+package com.yarendemirkaya.base.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import com.yarendemirkaya.home.R
 
 @Composable
 fun AddCartButton(onCartClick: () -> Unit) {
@@ -31,9 +29,7 @@ fun AddCartButton(onCartClick: () -> Unit) {
         border = BorderStroke(2.dp, Color(0xFFFFA500))
     ) {
         Text(
-            text = "Add to Cart", fontFamily = FontFamily(
-                Font(R.font.roboto_bold)
-            )
+            text = "Add to Cart"
         )
     }
 }

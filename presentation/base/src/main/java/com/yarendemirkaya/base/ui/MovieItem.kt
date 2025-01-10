@@ -1,4 +1,4 @@
-package com.yarendemirkaya.home.ui.components
+package com.yarendemirkaya.base.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,15 +21,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.glide.GlideImage
+import com.yarendemirkaya.base.R
 import com.yarendemirkaya.domain.model.MovieModel
-import com.yarendemirkaya.home.R
+
 
 @Composable
 fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Unit) {
@@ -74,13 +73,14 @@ fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Uni
                     textAlign = TextAlign.End,
                     modifier = Modifier
                         .padding(8.dp),
-                    color = Color.White, fontFamily = FontFamily(
-                        Font(R.font.roboto_bold)))
+                    color = Color.White
+                )
                 Icon(
-                    painter = painterResource(id = R.drawable.star_svgrepo_com),
+                    painter = painterResource(id = R.drawable.star),
                     contentDescription = null,
                     tint = Color.Unspecified,
-                    modifier = Modifier.padding(end = 2.dp, bottom = 3.dp))
+                    modifier = Modifier.padding(end = 2.dp, bottom = 3.dp)
+                )
             }
         }
         Column(
@@ -98,18 +98,13 @@ fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Uni
                 color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                fontFamily = FontFamily(
-                    Font(R.font.roboto_bold)
-                )
             )
             Text(
                 modifier = Modifier.padding(start = 8.dp),
                 text = "${movie.price} ₺",
                 fontSize = 18.sp,
                 color = Color.White,
-                fontFamily = FontFamily(
-                    Font(R.font.roboto_bold)
-                ))
+            )
             AddCartButton(onCartClick)
         }
     }

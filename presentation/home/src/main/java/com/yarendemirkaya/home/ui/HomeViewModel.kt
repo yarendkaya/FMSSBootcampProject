@@ -76,16 +76,13 @@ class HomeViewModel @Inject constructor(
                             )
                         }
                     }
-
                     else -> {}
                 }
             }
         }
     }
 
-    fun fetchMovies(
-//        category: String
-    ) {
+    fun fetchMovies() {
         viewModelScope.launch {
             getAllUsersCase().collect {
                 when (it) {
@@ -103,15 +100,8 @@ class HomeViewModel @Inject constructor(
                                 addAll(it.data.map { movie -> movie.category })
                             }
 
-//                            val filteredMovies = if (category == "All") {
-//                                it.data
-//                            } else {
-//                                it.data.filter { movie -> movie.category == category }
-//                            }
-
                             uiState.copy(
                                 movies =
-//                                filteredMovies
                                 it.data,
                                 filteredMovies = it.data,
                                 categories = newCategories,
@@ -146,8 +136,10 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+
     fun generalFilter(sortBy: String, ascending: Boolean) {
         val sortedMovies = when (sortBy) {
+
             "price" -> if (ascending) {
                 _uiState.value.movies.sortedBy { it.price }
             } else {
@@ -159,10 +151,11 @@ class HomeViewModel @Inject constructor(
             } else {
                 _uiState.value.movies.sortedByDescending { it.rating }
             }
-
             else -> _uiState.value.movies
         }
-        _uiState.value = _uiState.value.copy(movies = sortedMovies)
+        _uiState.value = _uiState.value.copy(
+            filteredMovies = sortedMovies
+        )
     }
 }
 

@@ -20,7 +20,8 @@ import com.yarendemirkaya.home.R
 fun CustomSearchBar(onSearchQueryChange: (String) -> Unit) {
     val searchQuery = remember { mutableStateOf("") }
 
-    TextField(value = searchQuery.value,
+    TextField(
+        value = searchQuery.value,
         onValueChange = {
             searchQuery.value = it
             onSearchQueryChange(it)
@@ -42,14 +43,14 @@ fun CustomSearchBar(onSearchQueryChange: (String) -> Unit) {
         colors = (TextFieldDefaults.colors(
             focusedContainerColor = Color(0xFF151515),
             unfocusedContainerColor = Color(0xFF151515),
-            cursorColor = Color.Yellow,
+            cursorColor = Color(0xFFFFC107),
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent,
             focusedTrailingIconColor = Color.Yellow,
             unfocusedTrailingIconColor = Color.Yellow,
-            focusedTextColor = Color.Yellow
+            focusedTextColor = Color(0xFFFFC107)
         ))
     )
 }

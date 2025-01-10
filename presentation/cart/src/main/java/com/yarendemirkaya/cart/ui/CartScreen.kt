@@ -36,6 +36,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
+import com.yarendemirkaya.base.ui.LoadingIndicator
+import com.yarendemirkaya.cart.R
 import com.yarendemirkaya.cart.ui.components.CartItem
 import com.yarendemirkaya.cart.ui.components.CustomCartTopAppBar
 import com.yarendemirkaya.cart.ui.components.Information
@@ -56,7 +58,9 @@ fun CartScreen(viewModel: CartViewModel) {
 
     Scaffold(
         topBar = {
-            CustomCartTopAppBar()
+            CustomCartTopAppBar(onItemClicked = {
+                viewModel.deleteAllMovies()
+            })
         },
         content = { paddingValues ->
             Column(
@@ -67,6 +71,7 @@ fun CartScreen(viewModel: CartViewModel) {
             ) {
                 when {
                     viewState.isLoading -> {
+                        LoadingIndicator()
                     }
 
                     viewState.error != null -> {
@@ -169,7 +174,7 @@ fun CartScreen(viewModel: CartViewModel) {
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Cart is empty \nPlease add a movie",
+                                text = "Your cart is empty",
                                 color = Color.White,
                                 fontSize = 20.sp
                             )

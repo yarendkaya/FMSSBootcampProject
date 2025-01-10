@@ -1,12 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("com.google.dagger.hilt.android")
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.yarendemirkaya.favorites"
+    namespace = "com.yarendemirkaya.base"
     compileSdk = 34
 
     defaultConfig {
@@ -43,8 +41,6 @@ android {
 dependencies {
 
     implementation(project(":domain"))
-    implementation(project(":core"))
-    implementation(project(":presentation:base"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -60,13 +56,5 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runtime)
-
-    implementation(libs.compose.navigation)
-    implementation(libs.live.data)
-
-    implementation(libs.landscapist.glide)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.gson)
+    implementation (libs.landscapist.glide)
 }

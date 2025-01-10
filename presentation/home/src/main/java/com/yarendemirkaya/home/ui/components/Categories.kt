@@ -48,7 +48,6 @@ fun Categories(
             modifier = Modifier
                 .border(2.dp, Color(0xFFFFA500), shape = RoundedCornerShape(4.dp))
                 .padding(4.dp)
-            //.clip(RoundedCornerShape(4.dp))
         ) {
             DropDownMenu(onFilterClick = onFilterClick)
         }

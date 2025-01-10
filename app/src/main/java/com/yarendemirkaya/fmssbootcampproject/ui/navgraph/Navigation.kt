@@ -26,7 +26,8 @@ fun NavGraph(
     favoritesViewModel: FavoritesViewModel,
     navController: NavHostController
 ) {
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(modifier = modifier, navController = navController, startDestination = "home") {
+
         composable("home") {
             HomeScreen(viewModel = viewModel, navController)
         }

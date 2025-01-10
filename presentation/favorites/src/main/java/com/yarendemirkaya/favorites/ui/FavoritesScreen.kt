@@ -28,7 +28,6 @@ import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.yarendemirkaya.domain.model.toInsertMovieModel
 import com.yarendemirkaya.domain.model.toMovieModel
-import com.yarendemirkaya.home.ui.components.MovieItem
 
 @Composable
 fun FavoritesScreen(viewModel: FavoritesViewModel, navController: NavController) {
@@ -51,7 +50,7 @@ fun FavoritesScreen(viewModel: FavoritesViewModel, navController: NavController)
             contentPadding = PaddingValues(16.dp)
         ) {
             items(viewState.favorites.size) {
-                MovieItem(
+                com.yarendemirkaya.base.ui.MovieItem(
                     movie = viewState.favorites[it].toMovieModel(),
                     onItemClick = {
                         val movieJson =
