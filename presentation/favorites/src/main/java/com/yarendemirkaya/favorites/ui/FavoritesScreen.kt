@@ -24,13 +24,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.gson.Gson
+import com.yarendemirkaya.base.ui.MovieItem
 import com.yarendemirkaya.domain.model.toInsertMovieModel
 import com.yarendemirkaya.domain.model.toMovieModel
 
 @Composable
-fun FavoritesScreen(viewModel: FavoritesViewModel, navController: NavController) {
+fun FavoritesScreen(
+    viewModel: FavoritesViewModel = hiltViewModel(),
+    navController: NavController
+) {
 
     LaunchedEffect(key1 = true) {
         viewModel.getFavorites()
@@ -50,7 +55,7 @@ fun FavoritesScreen(viewModel: FavoritesViewModel, navController: NavController)
             contentPadding = PaddingValues(16.dp)
         ) {
             items(viewState.favorites.size) {
-                com.yarendemirkaya.base.ui.MovieItem(
+                MovieItem(
                     movie = viewState.favorites[it].toMovieModel(),
                     onItemClick = {
                         val movieJson =

@@ -1,5 +1,6 @@
 package com.yarendemirkaya.base.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -16,6 +17,12 @@ fun LoadingIndicator() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Gray.copy(0.3f)),
+            contentAlignment = Alignment.Center
+        ) {}
         CircularProgressIndicator(
             color = Color(0xFFFFA500),
             strokeWidth = 8.dp,

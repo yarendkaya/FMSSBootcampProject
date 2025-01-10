@@ -28,12 +28,9 @@ class FavoritesViewModel @Inject constructor(
 
     fun getFavorites() {
         viewModelScope.launch {
+            _uiState.value = UiState(isLoading = true)
             getFavoritesUseCase().collect {
                 when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.value = UiState(isLoading = true)
-                    }
-
                     is ResponseState.Success -> {
                         _uiState.value = UiState(favorites = it.data)
                     }
@@ -41,6 +38,8 @@ class FavoritesViewModel @Inject constructor(
                     is ResponseState.Error -> {
                         _uiState.value = UiState(error = it.message)
                     }
+
+                    ResponseState.Loading -> TODO()
                 }
             }
         }
@@ -48,35 +47,26 @@ class FavoritesViewModel @Inject constructor(
 
     fun insertMovie(insertMovieModel: InsertMovieModel) {
         viewModelScope.launch {
-            insertMovieUseCase(insertMovieModel).collect {
-                when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = true
-                            )
-                        }
+            _uiState.value = UiState(isLoading = true)
+            when (val response = insertMovieUseCase(insertMovieModel)) {
+                is ResponseState.Success -> {
+                    _uiState.update { uiState ->
+                        uiState.copy(
+                            isLoading = false,
+                        )
                     }
-
-                    is ResponseState.Success -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = false,
-                                insertMovieResult = it.data
-                            )
-                        }
-                    }
-
-                    is ResponseState.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                error = uiState.error,
-                                isLoading = false
-                            )
-                        }
-                    }
-                    else -> {}
                 }
+
+                is ResponseState.Error -> {
+                    _uiState.update { uiState ->
+                        uiState.copy(
+                            error = uiState.error,
+                            isLoading = false
+                        )
+                    }
+                }
+
+                ResponseState.Loading -> TODO()
             }
         }
     }
@@ -86,5 +76,4 @@ data class UiState(
     val isLoading: Boolean = false,
     val favorites: List<FavMovieModel> = emptyList(),
     val error: String? = null,
-    val insertMovieResult: CartResponseModel? = null
 )

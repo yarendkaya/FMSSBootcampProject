@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val insertMovieUseCase: InsertMovieUseCase,
@@ -33,34 +34,26 @@ class DetailViewModel @Inject constructor(
 
     fun addMovieToCart(movie: InsertMovieModel) {
         viewModelScope.launch {
-            insertMovieUseCase(movie).collect {
-                when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = true,
-                            )
-                        }
-                    }
-
-                    is ResponseState.Success -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = false,
-                                insertMovieResponse = it.data,
-                            )
-                        }
-                    }
-
-                    is ResponseState.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                error = uiState.error,
-                                isLoading = false
-                            )
-                        }
+            _uiState.update { it.copy(isLoading = true) }
+            when (val response = insertMovieUseCase(movie)) {
+                is ResponseState.Success -> {
+                    _uiState.update { uiState ->
+                        uiState.copy(
+                            isLoading = false,
+                        )
                     }
                 }
+
+                is ResponseState.Error -> {
+                    _uiState.update { uiState ->
+                        uiState.copy(
+                            error = uiState.error,
+                            isLoading = false
+                        )
+                    }
+                }
+
+                ResponseState.Loading -> TODO()
             }
         }
     }
@@ -104,8 +97,96 @@ data class UiState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val isFavorited: Boolean = false,
-    val insertMovieResponse: CartResponseModel? = null,
 )
+
+
+//@HiltViewModel
+//class DetailViewModel @Inject constructor(
+//    private val insertMovieUseCase: InsertMovieUseCase,
+//    private val insertFavoriteUseCase: InsertFavoriteUseCase,
+//    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
+//    private val checkIfMovieFavoritedUseCase: CheckIfMovieFavoritedUseCase
+//) : ViewModel() {
+//
+//    private val _uiState = MutableStateFlow(UiState())
+//    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+//
+//
+//    fun addMovieToCart(movie: InsertMovieModel) {
+//        viewModelScope.launch {
+//            insertMovieUseCase(movie).collect {
+//                when (it) {
+//                    is ResponseState.Loading -> {
+//                        _uiState.update {
+//                            it.copy(
+//                                isLoading = true,
+//                            )
+//                        }
+//                    }
+//
+//                    is ResponseState.Success -> {
+//                        _uiState.update { uiState ->
+//                            uiState.copy(
+//                                isLoading = false,
+//                                insertMovieResponse = it.data,
+//                            )
+//                        }
+//                    }
+//
+//                    is ResponseState.Error -> {
+//                        _uiState.update { uiState ->
+//                            uiState.copy(
+//                                error = uiState.error,
+//                                isLoading = false
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    fun deleteMovieFromFavorites(movie: MovieModel) {
+//        viewModelScope.launch {
+//            deleteFavoriteUseCase.invoke(movie.toFavMovieModel())
+//            _uiState.update {
+//                it.copy(
+//                    isFavorited = false,
+//                )
+//            }
+//        }
+//    }
+//
+//    fun addMovieToFavorites(movie: MovieModel) {
+//        viewModelScope.launch {
+//            insertFavoriteUseCase.invoke(movie.toFavMovieModel())
+//            _uiState.update {
+//                it.copy(
+//                    isFavorited = true,
+//                )
+//            }
+//        }
+//    }
+//
+//    fun checkIfMovieIsFavorited(name: String) {
+//        viewModelScope.launch {
+//            val isFavorited = checkIfMovieFavoritedUseCase.invoke(name)
+//            _uiState.update {
+//                it.copy(
+//                    isFavorited = isFavorited
+//                )
+//            }
+//        }
+//    }
+//}
+//
+//data class UiState(
+//    val isLoading: Boolean = false,
+//    val error: String? = null,
+//    val isFavorited: Boolean = false,
+//    val insertMovieResponse: CartResponseModel? = null,
+//)
 
 
 

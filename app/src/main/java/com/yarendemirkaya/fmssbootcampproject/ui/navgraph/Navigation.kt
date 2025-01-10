@@ -1,7 +1,12 @@
 package com.yarendemirkaya.fmssbootcampproject.ui.navgraph
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -20,33 +25,56 @@ import com.yarendemirkaya.home.ui.HomeViewModel
 
 @Composable
 fun NavGraph(
-    modifier: Modifier = Modifier, viewModel: HomeViewModel,
-    detailViewModel: DetailViewModel,
-    cartViewModel: CartViewModel,
-    favoritesViewModel: FavoritesViewModel,
-    navController: NavHostController
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
 ) {
-    NavHost(modifier = modifier, navController = navController, startDestination = "home") {
-
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = "home",
+    ) {
         composable("home") {
-            HomeScreen(viewModel = viewModel, navController)
+            val viewModel = hiltViewModel<HomeViewModel>()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val uiEffect = viewModel.uiEffect
+
+            LaunchedEffect(Unit) {
+                viewModel.fetchMovies()
+            }
+
+            HomeScreen(
+                uiState = uiState,
+                uiEffect = uiEffect,
+                onAction = viewModel::onAction,
+                onNavigateToDetail = { movie ->
+                    val movieJson = Uri.encode(Gson().toJson(movie))
+                    navController.navigate("detail/$movieJson")
+                }
+            )
         }
-        
+
         composable(
             route = "detail/{movie}",
             arguments = listOf(navArgument("movie") { type = NavType.StringType })
         ) { backStackEntry ->
             val movieJson = backStackEntry.arguments?.getString("movie")
             val movie = Gson().fromJson(movieJson, MovieModel::class.java)
-            DetailScreen(movie, detailViewModel, navController)
+            DetailScreen(
+                movie = movie,
+                navController = navController
+            )
         }
 
         composable("cart") {
-            CartScreen(cartViewModel)
+            val viewModel = hiltViewModel<CartViewModel>()
+
+            CartScreen()
         }
 
         composable("favorites") {
-            FavoritesScreen(favoritesViewModel, navController)
+            FavoritesScreen(
+                navController = navController
+            )
         }
     }
 }

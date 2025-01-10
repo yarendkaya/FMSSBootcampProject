@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.yarendemirkaya.base.ui.LoadingIndicator
 import com.yarendemirkaya.cart.R
@@ -48,7 +49,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CartScreen(viewModel: CartViewModel) {
+fun CartScreen(viewModel: CartViewModel = hiltViewModel()) {
     val viewState by viewModel.uiState.collectAsState()
 
 

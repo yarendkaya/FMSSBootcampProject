@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,14 +22,14 @@ import com.yarendemirkaya.domain.model.MovieModel
 @Composable
 fun MovieGrid(
     movies: List<MovieModel>,
-    navController: NavController,
+    onMovieClick: (MovieModel) -> Unit,
     onCartClick: (InsertMovieModel) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
-            .background(Color.Black)
-            .padding(bottom = 88.dp),
+            .fillMaxSize()
+            .background(Color.Black),
         contentPadding = PaddingValues(8.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(30.dp)
@@ -37,10 +38,7 @@ fun MovieGrid(
         items(movies) { movie ->
             MovieItem(
                 movie = movie,
-                onItemClick = {
-                    val movieJson = Uri.encode(Gson().toJson(movie))
-                    navController.navigate("detail/$movieJson")
-                },
+                onMovieClick = onMovieClick,
                 onCartClick = {
                     val insertMovieModel = InsertMovieModel(
                         name = movie.name,

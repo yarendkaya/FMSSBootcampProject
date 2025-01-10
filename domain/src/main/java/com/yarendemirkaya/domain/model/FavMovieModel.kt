@@ -19,6 +19,7 @@ fun FavMovieModel.toMovieModel(): MovieModel {
         name = this.name,
         image = this.image,
         price = this.price,
+        priceStr = "${this.price} ₺",
         category = this.category,
         rating = this.rating,
         year = this.year,

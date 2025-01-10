@@ -29,13 +29,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.yarendemirkaya.home.R
+import com.yarendemirkaya.home.ui.SortType
 
 
 @Composable
 fun Categories(
     categories: List<String>,
     onCategorySelected: (String) -> Unit,
-    onFilterClick: (String) -> Unit
+    onFilterClick: (SortType) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -81,37 +82,40 @@ fun Categories(
 }
 
 @Composable
-fun DropDownMenu(onFilterClick: (String) -> Unit) {
+fun DropDownMenu(onFilterClick: (SortType) -> Unit) {
     val isDropDownExpanded = remember { mutableStateOf(false) }
-
     val itemPosition = remember { mutableIntStateOf(0) }
-
-    val members =
-        listOf("Fiyata Göre Artan", "Fiyata Göre Azalan", "Puana Göre Artan", "Puana Göre Azalan")
+    val sortTypes = SortType.entries
 
     Icon(
         painter = painterResource(R.drawable.filter_svgrepo_com),
         contentDescription = "Filter",
-        tint = Color.Gray, modifier = Modifier
+        tint = Color.Gray,
+        modifier = Modifier
             .background(Color.Black)
             .clickable {
                 isDropDownExpanded.value = true
             }
     )
-    DropdownMenu(modifier = Modifier.background(Color(0xFF151515)),
+    DropdownMenu(
+        modifier = Modifier.background(Color(0xFF151515)),
         expanded = isDropDownExpanded.value,
         onDismissRequest = {
             isDropDownExpanded.value = false
-        }) {
-        members.forEachIndexed { index, name ->
-            DropdownMenuItem(modifier = Modifier.background(Color(0xFF151515)), text = {
-                Text(text = name, color = Color.Gray)
-            },
+        }
+    ) {
+        sortTypes.forEachIndexed { index, type ->
+            DropdownMenuItem(
+                modifier = Modifier.background(Color(0xFF151515)),
+                text = {
+                    Text(text = type.value, color = Color.Gray)
+                },
                 onClick = {
                     isDropDownExpanded.value = false
                     itemPosition.intValue = index
-                    onFilterClick(name)
-                })
+                    onFilterClick(type)
+                }
+            )
         }
     }
 }

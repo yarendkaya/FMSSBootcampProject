@@ -7,36 +7,39 @@ import com.yarendemirkaya.domain.model.MovieModel
 data class Movie(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
-    val id: Int,
+    val id: Int? = null,
     @SerializedName("name")
-    val name: String,
+    val name: String? = null,
     @SerializedName("image")
-    val image: String,
+    val image: String? = null,
     @SerializedName("price")
-    val price: Int,
+    val price: Int? = null,
     @SerializedName("category")
-    val category: String,
+    val category: String? = null,
     @SerializedName("rating")
-    val rating: Double,
+    val rating: Double? = null,
     @SerializedName("year")
-    val year: Int,
+    val year: Int? = null,
     @SerializedName("director")
-    val director: String,
+    val director: String? = null,
     @SerializedName("description")
-    val description: String
+    val description: String? = null
 )
 
-fun Movie.toDomainModel(): MovieModel {
-    return MovieModel(
-        id = this.id,
-        name = this.name,
-        image = this.image,
-        price = this.price,
-        category = this.category,
-        rating = this.rating,
-        year = this.year,
-        director = this.director,
-        description = this.description
-    )
+fun List<Movie>?.toDomainModel(): List<MovieModel> {
+    return this?.map {
+        MovieModel(
+            id = it.id ?: 0,
+            name = it.name.orEmpty(),
+            image = "http://kasimadalan.pe.hu/movies/images/${it.image}",
+            price = it.price ?: 0,
+            priceStr = "${it.price} ₺",
+            category = it.category.orEmpty(),
+            rating = it.rating ?: 0.0,
+            year = it.year ?: 0,
+            director = it.director.orEmpty(),
+            description = it.description.orEmpty(),
+        )
+    }.orEmpty()
 }
 

@@ -10,26 +10,26 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 
 
-@Module
-@InstallIn(ViewModelComponent::class)
-object HomeUIModule {
-
-    @Provides
-    fun provideGetAllUsersUseCase(repo: MovieRepository): GetAllMoviesUseCase {
-        return GetAllMoviesUseCase(repo)
-    }
-
-
-    @Provides
-    fun provideInsertMovieUseCase(repo: MovieRepository): InsertMovieUseCase {
-        return InsertMovieUseCase(repo)
-    }
-
-    @Provides
-    fun provideHomeViewModel(
-        getAllUsersCase: GetAllMoviesUseCase,
-        insertMovieUseCase: InsertMovieUseCase
-    ): HomeViewModel {
-        return HomeViewModel(getAllUsersCase, insertMovieUseCase)
-    }
-}
+//@Module
+//@InstallIn(ViewModelComponent::class)
+//object HomeUIModule {
+//
+//    @Provides
+//    fun provideGetAllUsersUseCase(repo: MovieRepository): GetAllMoviesUseCase {
+//        return GetAllMoviesUseCase(repo)
+//    }
+//
+//
+//    @Provides
+//    fun provideInsertMovieUseCase(repo: MovieRepository): InsertMovieUseCase {
+//        return InsertMovieUseCase(repo)
+//    }
+//
+//    @Provides
+//    fun provideHomeViewModel(
+//        getAllUsersCase: GetAllMoviesUseCase,
+//        insertMovieUseCase: InsertMovieUseCase
+//    ): HomeViewModel {
+//        return HomeViewModel(getAllUsersCase, insertMovieUseCase)
+//    }
+//}

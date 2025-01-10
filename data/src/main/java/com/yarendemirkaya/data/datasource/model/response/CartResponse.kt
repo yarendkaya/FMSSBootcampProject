@@ -5,13 +5,13 @@ import com.yarendemirkaya.domain.model.CartResponseModel
 
 data class CartResponse(
     @SerializedName("success")
-    val success: Int,
+    val success: Int? = null,
     @SerializedName("message")
-    val message: String
+    val message: String? = null
 )
 
-fun CartResponse.toDomainModel() = CartResponseModel(
-    success = success,
-    message = message
+fun CartResponse?.toDomainModel() = CartResponseModel(
+    success = this?.success ?: 0,
+    message = this?.message.orEmpty(),
 )
 

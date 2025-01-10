@@ -15,18 +15,25 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.yarendemirkaya.fmssbootcampproject.R
 
 
 @Composable
-fun DynamicBottomBar(items: List<BottomBarItem>, navController: NavController) {
+fun DynamicBottomBar(navController: NavController) {
+    val bottomNavItems = listOf(
+        BottomBarItem("Home", R.drawable.ic_home, "home"),
+        BottomBarItem("Favorites", R.drawable.ic_favorites, "favorites"),
+        BottomBarItem("Cart", R.drawable.ic_cart, "cart")
+    )
+
     BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
         containerColor = Color.Black,
         contentColor = Color(0xFFFFA500)
     ) {
-        items.forEach { item ->
+        bottomNavItems.forEach { item ->
             NavigationBarItem(
-                selected =false,
+                selected = false,
                 onClick = {
                     navController.navigate(item.route)
                 },
@@ -55,4 +62,5 @@ fun DynamicBottomBar(items: List<BottomBarItem>, navController: NavController) {
         }
     }
 }
+
 

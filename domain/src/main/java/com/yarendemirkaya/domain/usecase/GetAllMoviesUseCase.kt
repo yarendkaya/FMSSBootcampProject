@@ -3,10 +3,13 @@ package com.yarendemirkaya.domain.usecase
 import com.yarendemirkaya.core.ResponseState
 import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.repo.MovieRepository
-import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetAllMoviesUseCase(private val movieRepository: MovieRepository) {
-    suspend operator fun invoke(): Flow<ResponseState<List<MovieModel>>> {
+class GetAllMoviesUseCase @Inject constructor(
+    private val movieRepository: MovieRepository,
+) {
+    suspend operator fun invoke(): ResponseState<List<MovieModel>> {
         return movieRepository.getAllMovies()
     }
 }
+

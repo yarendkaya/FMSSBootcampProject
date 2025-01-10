@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.skydoves.landscapist.glide.GlideImage
 import com.yarendemirkaya.base.ui.AddCartButton
@@ -38,19 +39,19 @@ import com.yarendemirkaya.detail.ui.components.ImdbRatingView
 import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.model.toInsertMovieModel
 
+
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun DetailScreen(
     movie: MovieModel,
-    viewModel: DetailViewModel, navController: NavController,
+    viewModel: DetailViewModel = hiltViewModel(),
+    navController: NavController,
 ) {
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(Unit) {
         viewModel.checkIfMovieIsFavorited(movie.name)
     }
 
-
-    val image = "http://kasimadalan.pe.hu/movies/images/${movie.image}"
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +63,7 @@ fun DetailScreen(
                 .height(LocalConfiguration.current.screenHeightDp.dp / 1.3f)
         ) {
             GlideImage(
-                image,
+                movie.image,
                 contentScale = ContentScale.Crop,
                 contentDescription = "Movie Image",
                 modifier = Modifier.fillMaxSize()

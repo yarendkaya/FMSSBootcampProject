@@ -23,7 +23,8 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val getCartMoviesUseCase: GetCartMoviesUseCase,
     private val deleteMovieUseCase: DeleteMovieUseCase,
-    private val insertMovieUseCase: InsertMovieUseCase) : ViewModel() {
+    private val insertMovieUseCase: InsertMovieUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -31,18 +32,9 @@ class CartViewModel @Inject constructor(
 
     fun deleteMovie(cartId: Int) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             deleteMovieUseCase(cartId).collect {
-
                 when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                isMovieDeleted = false,
-                                isLoading = true
-                            )
-                        }
-                    }
-
                     is ResponseState.Success -> {
                         _uiState.update {
                             it.copy(
@@ -62,6 +54,8 @@ class CartViewModel @Inject constructor(
                             )
                         }
                     }
+
+                    ResponseState.Loading -> TODO()
                 }
             }
         }
@@ -81,16 +75,9 @@ class CartViewModel @Inject constructor(
 
     fun getCartMovies() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             getCartMoviesUseCase().collect {
                 when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = true
-                            )
-                        }
-                    }
-
                     is ResponseState.Success -> {
                         val moviesWithOrderAmount = createMovieCartUiModels(it.data)
                         _uiState.update { uiState ->
@@ -109,6 +96,8 @@ class CartViewModel @Inject constructor(
                             )
                         }
                     }
+
+                    ResponseState.Loading -> TODO()
                 }
             }
         }
@@ -144,46 +133,38 @@ class CartViewModel @Inject constructor(
 
     fun increaseQuantity(movie: MovieCartUiModel) {
         viewModelScope.launch {
-            insertMovieUseCase(
-                InsertMovieModel(
-                    name = movie.name,
-                    image = movie.image,
-                    price = movie.price,
-                    category = movie.category,
-                    rating = movie.rating,
-                    year = movie.year,
-                    director = movie.director,
-                    description = movie.description,
-                    orderAmount = 1
-                )
-            ).collect {
-                when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = true
-                            )
-                        }
+            _uiState.update { it.copy(isLoading = true) }
+            val insertMovieModel = InsertMovieModel(
+                name = movie.name,
+                image = movie.image,
+                price = movie.price,
+                category = movie.category,
+                rating = movie.rating,
+                year = movie.year,
+                director = movie.director,
+                description = movie.description,
+                orderAmount = 1
+            )
+            when (val response = insertMovieUseCase(insertMovieModel)) {
+                is ResponseState.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false
+                        )
                     }
+                    getCartMovies()
+                }
 
-                    is ResponseState.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false
-                            )
-                        }
-                        getCartMovies()
-                    }
-
-                    is ResponseState.Error -> {
-                        _uiState.update {
-                            it.copy(
-                                error = it.error,
-                                isLoading = false
-                            )
-                        }
+                is ResponseState.Error -> {
+                    _uiState.update {
+                        it.copy(
+                            error = it.error,
+                            isLoading = false
+                        )
                     }
                 }
+
+                ResponseState.Loading -> TODO()
             }
         }
     }

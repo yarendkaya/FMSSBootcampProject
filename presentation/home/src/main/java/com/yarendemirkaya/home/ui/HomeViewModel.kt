@@ -3,14 +3,15 @@ package com.yarendemirkaya.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yarendemirkaya.core.ResponseState
-import com.yarendemirkaya.domain.model.CartResponseModel
 import com.yarendemirkaya.domain.model.InsertMovieModel
-import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.usecase.GetAllMoviesUseCase
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,154 +19,108 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getAllUsersCase: GetAllMoviesUseCase,
-    private val insertMovieUseCase: InsertMovieUseCase
+    private val getAllMoviesUseCase: GetAllMoviesUseCase,
+    private val insertMovieUseCase: InsertMovieUseCase,
 ) : ViewModel() {
-
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
+    private val _uiEffect = MutableSharedFlow<UiEffect>()
+    val uiEffect: SharedFlow<UiEffect> = _uiEffect.asSharedFlow()
 
-    fun onSearchTextChange(query: String) {
-        _uiState.update { uiState ->
-            uiState.copy(searchQuery = query)
+    fun onAction(uiAction: UiAction) {
+        viewModelScope.launch {
+            when (uiAction) {
+                is UiAction.OnAddCartClick -> insertMovie(uiAction.insertMovieModel)
+                is UiAction.OnQueryTextChange -> onSearchTextChange(uiAction.query)
+                is UiAction.OnCategorySelect -> filterMoviesByCategory(uiAction.category)
+                is UiAction.OnFilterClick -> generalFilter(uiAction.sortType)
+                is UiAction.OnMovieClick -> _uiEffect.emit(UiEffect.NavigateToDetail(uiAction.movie))
+            }
         }
+    }
+
+    private fun onSearchTextChange(query: String) {
+        updateUiState { copy(searchQuery = query) }
         filterMoviesBySearchQuery(query)
     }
 
     private fun filterMoviesBySearchQuery(query: String) {
         viewModelScope.launch {
-            _uiState.update { uiState ->
-                uiState.copy(
-                    filteredMovies = uiState.movies.filter { movie ->
-                        movie.name.contains(query, ignoreCase = true)
-                    }
-                )
-            }
+            val filteredMovies = _uiState.value.movies.filter { it.name.contains(query, ignoreCase = true) }
+            updateUiState { copy(filteredMovies = filteredMovies) }
         }
     }
 
-
-    fun insertMovie(insertMovieModel: InsertMovieModel) {
+    private fun insertMovie(insertMovieModel: InsertMovieModel) {
         viewModelScope.launch {
-            insertMovieUseCase(insertMovieModel).collect {
-                when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = true
-                            )
-                        }
-                    }
-
-                    is ResponseState.Success -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                isLoading = false,
-                                insertMovieResult = it.data
-                            )
-                        }
-                    }
-
-                    is ResponseState.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                error = uiState.error,
-                                isLoading = false
-                            )
-                        }
-                    }
-                    else -> {}
+            updateUiState { copy(isLoading = true) }
+            when (val response = insertMovieUseCase(insertMovieModel)) {
+                is ResponseState.Success -> {
+                    updateUiState { copy(isLoading = false) }
+                    _uiEffect.emit(UiEffect.ShowToast(response.data))
                 }
+
+                is ResponseState.Error -> {
+                    updateUiState { copy(isLoading = false) }
+                    _uiEffect.emit(UiEffect.ShowToast(response.message))
+                }
+
+                ResponseState.Loading -> TODO()
             }
         }
     }
 
     fun fetchMovies() {
         viewModelScope.launch {
-            getAllUsersCase().collect {
-                when (it) {
-                    is ResponseState.Loading -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = true
-                            )
-                        }
+            updateUiState { copy(isLoading = true) }
+            when (val response = getAllMoviesUseCase()) {
+                is ResponseState.Success -> {
+                    val newCategories = listOf("All") + response.data.map { it.category }.distinct()
+                    updateUiState {
+                        copy(
+                            movies = response.data,
+                            filteredMovies = response.data,
+                            categories = newCategories,
+                            isLoading = false
+                        )
                     }
-
-                    is ResponseState.Success -> {
-                        _uiState.update { uiState ->
-                            val newCategories = uiState.categories.apply {
-                                addAll(it.data.map { movie -> movie.category })
-                            }
-
-                            uiState.copy(
-                                movies =
-                                it.data,
-                                filteredMovies = it.data,
-                                categories = newCategories,
-                                isLoading = false,
-                            )
-                        }
-                    }
-
-                    is ResponseState.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                error = uiState.error,
-                                isLoading = false
-                            )
-                        }
-                    }
-                    else -> {}
                 }
+
+                is ResponseState.Error -> updateUiState { copy(error = response.message, isLoading = false) }
+                ResponseState.Loading -> TODO()
             }
         }
     }
 
-    fun filterMoviesByCategory(category: String) {
+    private fun filterMoviesByCategory(category: String) {
         val allMovies = _uiState.value.movies
-        _uiState.value = _uiState.value.copy(
-            filteredMovies = if (category == "All") {
-                allMovies
-            } else {
-                allMovies.filter { it.category == category }
-            },
-            selectedCategory = category
-        )
+        val filteredMovies = if (category == "All") {
+            allMovies
+        } else {
+            allMovies.filter { it.category == category }
+        }
+        updateUiState {
+            copy(selectedCategory = category, filteredMovies = filteredMovies)
+        }
     }
 
-
-    fun generalFilter(sortBy: String, ascending: Boolean) {
-        val sortedMovies = when (sortBy) {
-
-            "price" -> if (ascending) {
-                _uiState.value.movies.sortedBy { it.price }
-            } else {
-                _uiState.value.movies.sortedByDescending { it.price }
+    private fun generalFilter(sortType: SortType) {
+        val currentState = _uiState.value
+        val sortedMovies = if (sortType.ascending) {
+            currentState.movies.sortedBy {
+                if (sortType.type == SortCategory.PRICE) it.price.toDouble() else it.rating
             }
-
-            "rating" -> if (ascending) {
-                _uiState.value.movies.sortedBy { it.rating }
-            } else {
-                _uiState.value.movies.sortedByDescending { it.rating }
+        } else {
+            currentState.movies.sortedByDescending {
+                if (sortType.type == SortCategory.PRICE) it.price.toDouble() else it.rating
             }
-            else -> _uiState.value.movies
         }
-        _uiState.value = _uiState.value.copy(
-            filteredMovies = sortedMovies
-        )
+        updateUiState { copy(filteredMovies = sortedMovies) }
+    }
+
+    private fun updateUiState(block: UiState.() -> UiState) {
+        _uiState.update(block)
     }
 }
-
-data class UiState(
-    val isLoading: Boolean = false, // ?
-    val movies: List<MovieModel> = emptyList(),
-    val categories: MutableSet<String> = mutableSetOf("All"), // mutable set kullanarak categories listesinde her elemandan sadece birer tane olmasnı sağlıyoruz.
-    val error: String? = null,
-    val selectedCategory: String = "All",
-    val insertMovieResult: CartResponseModel? = null,
-    val searchQuery: String = "",
-    val filteredMovies: List<MovieModel> = emptyList()
-)
