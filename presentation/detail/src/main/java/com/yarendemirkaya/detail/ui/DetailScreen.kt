@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -30,8 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.skydoves.landscapist.glide.GlideImage
 import com.yarendemirkaya.base.ui.AddCartButton
 import com.yarendemirkaya.detail.R
@@ -43,15 +40,12 @@ import com.yarendemirkaya.domain.model.toInsertMovieModel
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun DetailScreen(
+    uiState: UiState,
     movie: MovieModel,
-    viewModel: DetailViewModel = hiltViewModel(),
-    navController: NavController,
+    onToggleFavorite: () -> Unit,
+    onAction: (UiAction) -> Unit,
+    onBackClick: () -> Unit,
 ) {
-
-    LaunchedEffect(Unit) {
-        viewModel.checkIfMovieIsFavorited(movie.name)
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -117,7 +111,7 @@ fun DetailScreen(
                 }
             }
             Icon(
-                painter = painterResource(id = if (viewModel.uiState.value.isFavorited) R.drawable.ic_fav_filled else R.drawable.ic_fav),
+                painter = painterResource(id = if (uiState.isFavorited) R.drawable.ic_fav_filled else R.drawable.ic_fav),
                 tint = Color.White,
                 contentDescription = "Favorite",
                 modifier = Modifier
@@ -125,11 +119,7 @@ fun DetailScreen(
                     .padding(top = 32.dp, end = 24.dp)
                     .size(40.dp)
                     .clickable(onClick = {
-                        if (viewModel.uiState.value.isFavorited) {
-                            viewModel.deleteMovieFromFavorites(movie)
-                        } else {
-                            viewModel.addMovieToFavorites(movie)
-                        }
+                        onToggleFavorite()
                     })
             )
             Icon(
@@ -141,15 +131,13 @@ fun DetailScreen(
                     .padding(top = 32.dp, start = 24.dp)
                     .size(40.dp)
                     .clickable {
-                        navController.popBackStack()
+                        onBackClick()
                     }
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
         MovieDetail(movie, onCartClick = {
-            viewModel.addMovieToCart(
-                movie.toInsertMovieModel()
-            )
+            onAction(UiAction.OnAddCartClick(movie.toInsertMovieModel()))
         })
     }
 }
@@ -178,7 +166,7 @@ fun MovieDetail(movie: MovieModel, onCartClick: () -> Unit = {}) {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
-                text = "Price: ${movie.price} USD", color = Color((0xFFFFA500)),
+                text = "Price: ${movie.priceStr} USD", color = Color((0xFFFFA500)),
                 fontSize = 25.sp
             )
             AddCartButton(onCartClick = {

@@ -32,7 +32,6 @@ import com.yarendemirkaya.domain.model.MovieModel
 
 @Composable
 fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Unit) {
-    val image = "http://kasimadalan.pe.hu/movies/images/${movie.image}"
 
     Column(
         modifier = Modifier
@@ -46,7 +45,7 @@ fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Uni
                 .clip(RoundedCornerShape(6.dp))
 
         ) {
-            GlideImage(image, contentScale = ContentScale.FillWidth)
+            GlideImage(movie.image, contentScale = ContentScale.FillWidth)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

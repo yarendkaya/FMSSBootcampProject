@@ -32,27 +32,34 @@ class DetailViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
 
+    fun onAction(uiAction: UiAction) {
+        viewModelScope.launch {
+            when (uiAction) {
+                is UiAction.OnAddCartClick -> addMovieToCart(uiAction.insertMovieModel)
+                is UiAction.OnDeleteFavoriteClick -> deleteMovieFromFavorites(uiAction.movie)
+                is UiAction.OnAddFavoriteClick -> addMovieToFavorites(uiAction.movie)
+                is UiAction.OnCheckIfFavorited -> checkIfMovieIsFavorited(uiAction.name)
+            }
+        }
+    }
+
     fun addMovieToCart(movie: InsertMovieModel) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            updateUiState { copy(isLoading = true) }
             when (val response = insertMovieUseCase(movie)) {
                 is ResponseState.Success -> {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            isLoading = false,
-                        )
+                    updateUiState {
+                        copy(isLoading = false)
                     }
                 }
-
                 is ResponseState.Error -> {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            error = uiState.error,
+                    updateUiState {
+                        copy(
+                            error = error,
                             isLoading = false
                         )
                     }
                 }
-
                 ResponseState.Loading -> TODO()
             }
         }
@@ -62,10 +69,8 @@ class DetailViewModel @Inject constructor(
     fun deleteMovieFromFavorites(movie: MovieModel) {
         viewModelScope.launch {
             deleteFavoriteUseCase.invoke(movie.toFavMovieModel())
-            _uiState.update {
-                it.copy(
-                    isFavorited = false,
-                )
+            updateUiState {
+                copy(isFavorited = false)
             }
         }
     }
@@ -73,10 +78,8 @@ class DetailViewModel @Inject constructor(
     fun addMovieToFavorites(movie: MovieModel) {
         viewModelScope.launch {
             insertFavoriteUseCase.invoke(movie.toFavMovieModel())
-            _uiState.update {
-                it.copy(
-                    isFavorited = true,
-                )
+            updateUiState {
+                copy(isFavorited = true)
             }
         }
     }
@@ -84,20 +87,17 @@ class DetailViewModel @Inject constructor(
     fun checkIfMovieIsFavorited(name: String) {
         viewModelScope.launch {
             val isFavorited = checkIfMovieFavoritedUseCase.invoke(name)
-            _uiState.update {
-                it.copy(
-                    isFavorited = isFavorited
-                )
+            updateUiState {
+                copy(isFavorited = isFavorited)
             }
         }
     }
-}
 
-data class UiState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
-    val isFavorited: Boolean = false,
-)
+    private fun updateUiState(block: UiState.() -> UiState) {
+        _uiState.update(block)
+    }
+
+}
 
 
 //@HiltViewModel

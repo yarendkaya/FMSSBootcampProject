@@ -57,11 +57,32 @@ fun NavGraph(
             route = "detail/{movie}",
             arguments = listOf(navArgument("movie") { type = NavType.StringType })
         ) { backStackEntry ->
+
             val movieJson = backStackEntry.arguments?.getString("movie")
             val movie = Gson().fromJson(movieJson, MovieModel::class.java)
+
+
+            val viewModel = hiltViewModel<DetailViewModel>()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+            LaunchedEffect(Unit) {
+                viewModel.checkIfMovieIsFavorited(movie.name)
+            }
+
             DetailScreen(
+                uiState = uiState,
                 movie = movie,
-                navController = navController
+                onAction = viewModel::onAction,
+                onToggleFavorite = {
+                    if (uiState.isFavorited) {
+                        viewModel.deleteMovieFromFavorites(movie)
+                    } else {
+                        viewModel.addMovieToFavorites(movie)
+                    }
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
             )
         }
 
