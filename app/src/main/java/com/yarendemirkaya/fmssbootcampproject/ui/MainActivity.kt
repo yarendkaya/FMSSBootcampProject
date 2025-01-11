@@ -1,45 +1,50 @@
 package com.yarendemirkaya.fmssbootcampproject.ui
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.SampleNav
+import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.NavGraph
+import com.yarendemirkaya.fmssbootcampproject.ui.navgraph.bottombar.DynamicBottomBar
 import com.yarendemirkaya.fmssbootcampproject.ui.theme.FMSSBootcampProjectTheme
-import com.yarendemirkaya.sample.ui.FloatingActionBtn
-import com.yarendemirkaya.sample.ui.SampleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: SampleViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             FMSSBootcampProjectTheme {
                 val navController = rememberNavController()
+                val visibleList = listOf("home", "favorites", "cart")
+                val bottomBarVisibility =
+                    navController.currentBackStackEntryAsState().value?.destination?.route in visibleList
+
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    floatingActionButton = {
-                        FloatingActionBtn(
-                            navController = navController
-                        )
+                    bottomBar = {
+                        AnimatedVisibility(bottomBarVisibility) {
+                            DynamicBottomBar(
+                                navController = navController
+                            )
+                        }
                     }
                 ) { paddingValues ->
-
-                    SampleNav(
+                    NavGraph(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(paddingValues),
-                        viewModel = viewModel,
-                        navController = navController
+                        navController = navController,
                     )
                 }
             }

@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.dagger.hilt.android")
     alias(libs.plugins.ksp)
-
-
 }
 
 android {
@@ -23,6 +21,7 @@ android {
             useSupportLibrary = true
         }
     }
+
 
     buildTypes {
         release {
@@ -56,8 +55,11 @@ android {
 dependencies {
 
     implementation(project(":data"))
-    implementation(project(":presentation:sample"))
     implementation(project(":domain"))
+    implementation(project(":presentation:home"))
+    implementation(project(":presentation:detail"))
+    implementation(project(":presentation:cart"))
+    implementation(project(":presentation:favorites"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -78,8 +80,10 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
     //navigation
     implementation(libs.compose.navigation)
-    implementation("androidx.compose.runtime:runtime:1.7.6")
+    implementation(libs.androidx.runtime)
+    implementation(libs.gson)
 
 }
