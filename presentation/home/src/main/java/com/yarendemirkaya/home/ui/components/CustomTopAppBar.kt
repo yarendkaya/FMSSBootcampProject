@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,38 +24,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yarendemirkaya.home.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar() {
-    TopAppBar(
-        title = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Transparent),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = "SİNEFİL",
-                    fontSize = 35.sp,
-                    textAlign = TextAlign.Center,
-                    fontFamily = FontFamily(
-                        Font(R.font.montserrat_bold)
-                    ),
-                    color = Color.White
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    painter = painterResource(R.drawable.elephant_8_svgrepo_com),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                )
-            }
-        }, colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black
-        ), modifier = Modifier
-            .fillMaxWidth(), scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "SİNEFİL",
+            fontSize = 35.sp,
+            textAlign = TextAlign.Center,
+            fontFamily = FontFamily(
+                Font(R.font.montserrat_bold)
+            ),
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Icon(
+            painter = painterResource(R.drawable.elephant_8_svgrepo_com),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
+    }
 }

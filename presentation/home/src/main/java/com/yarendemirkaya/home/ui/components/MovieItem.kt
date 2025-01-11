@@ -109,7 +109,7 @@ fun MovieItem(
             )
             Text(
                 modifier = Modifier.padding(start = 8.dp),
-                text = movie.priceStr,
+                text = "${movie.price} USD",
                 fontSize = 18.sp,
                 color = Color.White,
                 fontFamily = FontFamily(

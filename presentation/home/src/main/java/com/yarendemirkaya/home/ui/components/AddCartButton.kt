@@ -21,9 +21,10 @@ import kotlinx.coroutines.delay
 @Composable
 fun AddCartButton(onCartClick: () -> Unit) {
     val isClicked = remember { mutableStateOf(false) }
+
     LaunchedEffect(isClicked.value) {
         if (isClicked.value) {
-            delay(1000)
+            delay(500)
             isClicked.value = false
         }
     }

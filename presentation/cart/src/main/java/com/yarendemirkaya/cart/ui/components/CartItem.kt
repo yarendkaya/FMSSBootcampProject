@@ -40,7 +40,7 @@ fun CartItem(
     onDecreaseQuantity: () -> Unit,
     onDeleteItem: () -> Unit
 ) {
-    val image = "http://kasimadalan.pe.hu/movies/images/${movieCartUiModel.image}"
+
     Row(
         modifier = Modifier
             .height((LocalConfiguration.current.screenHeightDp / 7).dp)
@@ -54,7 +54,7 @@ fun CartItem(
             modifier = Modifier
                 .weight(0.5f)
         ) {
-            GlideImage(image, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
+            GlideImage(movieCartUiModel.image, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
         }
 
         Spacer(modifier = Modifier.width(16.dp))

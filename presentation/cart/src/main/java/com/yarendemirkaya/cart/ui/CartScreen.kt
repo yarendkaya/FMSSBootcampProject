@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yarendemirkaya.base.ui.LoadingIndicator
 import com.yarendemirkaya.cart.ui.components.CartItem
 import com.yarendemirkaya.cart.ui.components.CustomCartTopAppBar
 import com.yarendemirkaya.cart.ui.components.Information
@@ -67,7 +66,6 @@ fun CartScreen(
                             }
                         )
                     }
-
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
@@ -130,7 +128,6 @@ fun CartScreen(
                         }
                     }
                 }
-                if (uiState.isLoading) LoadingIndicator()
             }
         }
     )

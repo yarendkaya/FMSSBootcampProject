@@ -65,6 +65,6 @@ dependencies {
     ksp(libs.room.compiler)
 
 
-    implementation("androidx.compose.runtime:runtime:1.7.6")
+    implementation(libs.androidx.runtime)
 
 }

@@ -59,12 +59,12 @@ class HomeViewModel @Inject constructor(
             when (val response = insertMovieUseCase(insertMovieModel)) {
                 is ResponseState.Success -> {
                     updateUiState { copy(isLoading = false) }
-                    _uiEffect.emit(UiEffect.ShowToast(response.data))
+//                    _uiEffect.emit(UiEffect.ShowToast(response.data))
                 }
 
                 is ResponseState.Error -> {
                     updateUiState { copy(isLoading = false) }
-                    _uiEffect.emit(UiEffect.ShowToast(response.message))
+//                    _uiEffect.emit(UiEffect.ShowToast(response.message))
                 }
 
             }
@@ -86,7 +86,6 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }
-
                 is ResponseState.Error -> updateUiState { copy(error = response.message, isLoading = false) }
             }
         }

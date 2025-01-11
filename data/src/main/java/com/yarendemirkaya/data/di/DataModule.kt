@@ -66,5 +66,4 @@ object DataModule {
     fun provideContext(application: Application): Context {
         return application.applicationContext
     }
-
 }

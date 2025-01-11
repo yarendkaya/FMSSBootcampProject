@@ -1,6 +1,7 @@
 package com.yarendemirkaya.detail.ui
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,15 +50,17 @@ fun DetailScreen(
     onAction: (UiAction) -> Unit,
     onBackClick: () -> Unit,
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
+            .verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(LocalConfiguration.current.screenHeightDp.dp / 1.3f)
+                .height(LocalConfiguration.current.screenHeightDp.dp / 1.4f)
         ) {
             GlideImage(
                 movie.image,
@@ -136,43 +142,70 @@ fun DetailScreen(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        MovieDetail(movie, onCartClick = {
-            onAction(UiAction.OnAddCartClick(movie.toInsertMovieModel()))
-        })
-    }
-}
-
-@Composable
-fun MovieDetail(movie: MovieModel, onCartClick: () -> Unit = {}) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp)
-    ) {
-        Text(
-            text = movie.description, color = Color.White,
-            fontSize = 22.sp
-        )
-        Text(
-            text = "Director: ${movie.director}", color = Color.White,
-            fontSize = 22.sp
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .padding(start = 16.dp)
         ) {
             Text(
-                text = "Price: ${movie.priceStr} USD", color = Color((0xFFFFA500)),
-                fontSize = 25.sp
+                text = movie.description, color = Color.White,
+                fontSize = 22.sp
             )
-            AddCartButton(onCartClick = {
-                onCartClick()
-            })
+            Text(
+                text = "Director: ${movie.director}", color = Color.White,
+                fontSize = 22.sp
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text(
+                    text = "Price: ${movie.price} USD", color = Color((0xFFFFA500)),
+                    fontSize = 25.sp
+                )
+                AddCartButton(onCartClick = {
+                    onAction(UiAction.OnAddCartClick(movie.toInsertMovieModel()))
+                })
+            }
         }
     }
 }
+
+//@Composable
+//fun MovieDetail(movie: MovieModel, onCartClick: () -> Unit = {}) {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(start = 16.dp)
+//    ) {
+//        Text(
+//            text = movie.description, color = Color.White,
+//            fontSize = 22.sp
+//        )
+//        Text(
+//            text = "Director: ${movie.director}", color = Color.White,
+//            fontSize = 22.sp
+//        )
+//
+//        Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(end = 4.dp),
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.SpaceEvenly
+//        ) {
+//            Text(
+//                text = "Price: ${movie.priceStr} USD", color = Color((0xFFFFA500)),
+//                fontSize = 25.sp
+//            )
+//            AddCartButton(onCartClick = {
+//                onCartClick()
+//            })
+//        }
+//    }
+//}
 

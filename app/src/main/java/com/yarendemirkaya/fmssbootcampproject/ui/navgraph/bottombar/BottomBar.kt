@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.yarendemirkaya.fmssbootcampproject.R
 
 
@@ -23,19 +24,26 @@ fun DynamicBottomBar(navController: NavController) {
     val bottomNavItems = listOf(
         BottomBarItem("Home", R.drawable.ic_home, "home"),
         BottomBarItem("Favorites", R.drawable.ic_favorites, "favorites"),
-        BottomBarItem("Cart", R.drawable.ic_cart, "cart")
+        BottomBarItem("My Cart", R.drawable.ic_cart, "cart")
     )
 
+    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
     BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
         containerColor = Color.Black,
         contentColor = Color(0xFFFFA500)
     ) {
         bottomNavItems.forEach { item ->
+            val isSelected = currentDestination?.route == item.route
             NavigationBarItem(
-                selected = false,
+                selected = isSelected,
                 onClick = {
-                    navController.navigate(item.route)
+                    if (currentDestination?.route != item.route) {
+                        navController.navigate(item.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color(0xFFFFA500),

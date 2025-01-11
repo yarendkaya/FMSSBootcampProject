@@ -6,7 +6,6 @@ import com.yarendemirkaya.core.ResponseState
 import com.yarendemirkaya.domain.model.InsertMovieModel
 import com.yarendemirkaya.domain.usecase.InsertMovieUseCase
 import com.yarendemirkaya.domain.usecase.favorites.GetFavoritesUseCase
-import com.yarendemirkaya.home.ui.UiEffectFavorites
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +34,11 @@ class FavoritesViewModel @Inject constructor(
         viewModelScope.launch {
             when (uiAction) {
                 is UiAction.OnAddToCartClick -> insertMovie(uiAction.movie)
-                is UiAction.OnMovieClick -> _uiEffect.emit(UiEffectFavorites.NavigateToDetailFromFavorites(uiAction.movie))
+                is UiAction.OnMovieClick -> _uiEffect.emit(
+                    UiEffectFavorites.NavigateToDetailFromFavorites(
+                        uiAction.movie
+                    )
+                )
             }
         }
     }
@@ -55,7 +58,14 @@ class FavoritesViewModel @Inject constructor(
                         }
                     }
 
-                    is ResponseState.Error -> TODO()
+                    is ResponseState.Error -> {
+                        updateUiState {
+                            copy(
+                                isLoading = false,
+                                favorites = emptyList()
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -63,16 +73,22 @@ class FavoritesViewModel @Inject constructor(
 
     private fun insertMovie(insertMovieModel: InsertMovieModel) {
         viewModelScope.launch {
-            _uiState.value = UiState(isLoading = true)
+            _uiState.value = UiState(isLoading = true,
+                favorites = emptyList(),)
             when (val response = insertMovieUseCase(insertMovieModel)) {
                 is ResponseState.Success -> {
-                    updateUiState { copy(isLoading = false) }
-                    _uiEffect.emit(UiEffectFavorites.ShowToast(response.data))
+                    updateUiState {
+                        copy(
+                            isLoading = false
+                        )
+                    }
+                    getFavorites()
+//                    _uiEffect.emit(UiEffectFavorites.ShowToast(response.data))
                 }
 
                 is ResponseState.Error -> {
                     updateUiState { copy(isLoading = false) }
-                    _uiEffect.emit(UiEffectFavorites.ShowToast(response.message))
+//                    _uiEffect.emit(UiEffectFavorites.ShowToast(response.message))
                 }
             }
         }
@@ -82,6 +98,7 @@ class FavoritesViewModel @Inject constructor(
         _uiState.update(block)
     }
 }
+
 
 
 

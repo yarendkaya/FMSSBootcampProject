@@ -24,41 +24,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yarendemirkaya.cart.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomCartTopAppBar(onItemClicked: () -> Unit) {
-    TopAppBar(
-        title = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp)
-                    .background(Color.Transparent),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    modifier = Modifier
-                        .wrapContentHeight(Alignment.CenterVertically)
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    text = "My Cart",
-                    fontSize = 35.sp,
-                    color = Color.White
-                )
-                Spacer(modifier = Modifier.weight(0.4f)) //?
-                Icon(
-                    modifier = Modifier
-                        .size(30.dp)
-                        .clickable {
-                            onItemClicked()
-                        },
-                    painter = painterResource(R.drawable.delete_svgrepo_com__1_),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                )
-            }
-        }, colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .background(Color.Transparent),
+
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .wrapContentHeight(Alignment.CenterVertically)
+                .wrapContentWidth(Alignment.CenterHorizontally),
+            text = "My Cart",
+            fontSize = 35.sp,
+            color = Color.White
         )
-    )
+        Spacer(modifier = Modifier.weight(0.4f)) //?
+        Icon(
+            modifier = Modifier
+                .size(30.dp)
+                .padding(end=4.dp)
+                .clickable {
+                    onItemClicked()
+                },
+            painter = painterResource(R.drawable.delete_svgrepo_com__1_),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
+    }
 }

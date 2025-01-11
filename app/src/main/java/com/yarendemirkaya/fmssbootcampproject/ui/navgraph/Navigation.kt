@@ -3,7 +3,6 @@ package com.yarendemirkaya.fmssbootcampproject.ui.navgraph
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +18,7 @@ import com.yarendemirkaya.cart.ui.CartViewModel
 import com.yarendemirkaya.detail.ui.DetailScreen
 import com.yarendemirkaya.detail.ui.DetailViewModel
 import com.yarendemirkaya.domain.model.MovieModel
+import com.yarendemirkaya.domain.model.toInsertMovieModel
 import com.yarendemirkaya.favorites.ui.FavoritesScreen
 import com.yarendemirkaya.favorites.ui.FavoritesViewModel
 import com.yarendemirkaya.home.ui.HomeScreen

@@ -34,9 +34,4 @@ object FavoritesUiModule {
     fun provideCheckIfMovieFavoritedUseCase(movieRepository: MovieRepository): CheckIfMovieFavoritedUseCase {
         return CheckIfMovieFavoritedUseCase(movieRepository)
     }
-//    @Provides
-//    fun provideFavoritesViewModel(
-//        getFavoritesUseCase: GetFavoritesUseCase,insertMovieUseCase: InsertMovieUseCase): FavoritesViewModel {
-//        return FavoritesViewModel(getFavoritesUseCase,insertMovieUseCase)
-//    }
 }

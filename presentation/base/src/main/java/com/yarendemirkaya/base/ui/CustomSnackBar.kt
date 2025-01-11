@@ -12,12 +12,15 @@ import androidx.compose.ui.unit.sp
 fun CustomSnackBar(text: String) {
     SnackbarHost(
         hostState = SnackbarHostState()
-    ) { snackbarData ->
+    ) { snackBarData ->
         Snackbar(
-            snackbarData = snackbarData,
-            actionColor = Color.Red,
-            containerColor = Color.Black,
-            contentColor = Color.White
-        )
+            containerColor = Color.Red,
+            contentColor = Color.White,
+            ) {
+            Text(
+                text = text,
+                fontSize = 18.sp
+            )
+        }
     }
 }

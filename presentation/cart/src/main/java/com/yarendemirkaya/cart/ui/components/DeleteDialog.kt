@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun Information(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+fun DeleteDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Cart is ready for payment", color = Color.White) },
-        text = { Text("Do you want to go to the payment screen?", color = Color.White) },
+        title = { Text(text = "Delete", color = Color.White) },
+        text = { Text("Do you want to delete all items from cart?", color = Color.White) },
         confirmButton = {
             Button(
                 onClick = onConfirm,

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +30,6 @@ import com.yarendemirkaya.base.ui.collectWithLifecycle
 import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.model.toInsertMovieModel
 import com.yarendemirkaya.domain.model.toMovieModel
-import com.yarendemirkaya.home.ui.UiEffectFavorites
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -42,13 +43,23 @@ fun FavoritesScreen(
 
     uiEffect.collectWithLifecycle {
         when (it) {
-            is UiEffectFavorites.ShowToast -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+            is UiEffectFavorites.ShowToast -> Toast.makeText(
+                context,
+                it.message,
+                Toast.LENGTH_SHORT
+            )
+                .show()
+
             is UiEffectFavorites.NavigateToDetailFromFavorites -> onNavigateToDetailFromFavorites(it.movie)
             is UiEffectFavorites.None -> Unit
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
         CustomTopAppBar()
         if (uiState.favorites.isNotEmpty()) {
             LazyVerticalGrid(
@@ -76,30 +87,22 @@ fun FavoritesScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomTopAppBar() {
-    TopAppBar(
-        title = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.Transparent),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Favoriler",
-                    fontSize = 35.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.White
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Black
-        ),
+    Row(
         modifier = Modifier
-            .fillMaxWidth(),
-    )
+            .fillMaxWidth()
+            .padding(top=8.dp)
+        ,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Favourites",
+            fontSize = 35.sp,
+            textAlign = TextAlign.Center,
+            color = Color.White
+        )
+    }
 }
+

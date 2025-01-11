@@ -1,4 +1,4 @@
-package com.yarendemirkaya.home.ui
+package com.yarendemirkaya.favorites.ui
 
 import com.yarendemirkaya.domain.model.MovieModel
 
