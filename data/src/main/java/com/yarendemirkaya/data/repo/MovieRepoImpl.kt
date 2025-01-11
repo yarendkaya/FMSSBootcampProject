@@ -70,39 +70,39 @@ class MovieRepoImpl @Inject constructor(
     }
 
 
-    override suspend fun getMovieCart(): Flow<ResponseState<List<MovieCartModel>>> = flow {
-        try {
+    override suspend fun getMovieCart(): ResponseState<List<MovieCartModel>> {
+        return try {
             val response = api.getMovieCart("yaren_demirkaya")
             if (response.isSuccessful) {
                 val movies = response.body()?.movieCart?.map { it.toDomainModel() }
                 if (movies != null) {
-                    emit(ResponseState.Success(movies))
+                    ResponseState.Success(movies)
                 } else {
-                    emit(ResponseState.Error("No data found"))
+                    ResponseState.Error("No data found")
                 }
             } else {
-                emit(ResponseState.Error("No data found"))
+                ResponseState.Error("No data found")
             }
         } catch (e: Exception) {
-            emit(ResponseState.Error(e.message ?: "An error occurred"))
+            ResponseState.Error(e.message ?: "An error occurred")
         }
     }
 
-    override suspend fun deleteMovie(cartId: Int): Flow<ResponseState<CartResponseModel>> = flow {
-        try {
+    override suspend fun deleteMovie(cartId: Int): ResponseState<CartResponseModel> {
+        return try {
             val response = api.deleteMovie(cartId, "yaren_demirkaya")
             if (response.isSuccessful) {
                 val cartResponse = response.body()?.toDomainModel()
                 if (cartResponse != null) {
-                    emit(ResponseState.Success(cartResponse))
+                    ResponseState.Success(cartResponse)
                 } else {
-                    emit(ResponseState.Error("No data found"))
+                    ResponseState.Error("No data found")
                 }
             } else {
-                emit(ResponseState.Error("No data found"))
+                ResponseState.Error("No data found")
             }
         } catch (e: Exception) {
-            emit(ResponseState.Error(e.message ?: "An error occurred"))
+            ResponseState.Error(e.message ?: "An error occurred")
         }
     }
 

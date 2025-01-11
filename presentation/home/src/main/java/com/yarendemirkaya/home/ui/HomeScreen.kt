@@ -64,7 +64,7 @@ fun HomeScreen(
             MovieGrid(
                 movies = uiState.filteredMovies,
                 onMovieClick = { onAction(UiAction.OnMovieClick(it)) },
-                onCartClick = { onAction(UiAction.OnAddCartClick(it)) }
+                onCartClick = { onAction(UiAction.OnAddCartClick(it))}
             )
         }
     }

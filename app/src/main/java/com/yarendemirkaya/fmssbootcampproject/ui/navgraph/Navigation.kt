@@ -89,8 +89,16 @@ fun NavGraph(
 
         composable("cart") {
             val viewModel = hiltViewModel<CartViewModel>()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-            CartScreen()
+            LaunchedEffect(key1 = true) {
+                viewModel.getCartMovies()
+            }
+
+            CartScreen(
+                uiState = uiState,
+                onAction = viewModel::onAction
+            )
         }
 
         composable("favorites") {

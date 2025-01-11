@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.Flow
 interface MovieRepository {
     suspend fun getAllMovies(): ResponseState<List<MovieModel>>
     suspend fun insertMovie(movieInsert: InsertMovieModel): ResponseState<String>
-    suspend fun getMovieCart(): Flow<ResponseState<List<MovieCartModel>>>
-    suspend fun deleteMovie(cartId: Int): Flow<ResponseState<CartResponseModel>>
+    suspend fun getMovieCart(): ResponseState<List<MovieCartModel>>
+    suspend fun deleteMovie(cartId: Int): ResponseState<CartResponseModel>
     suspend fun getAllFavoriteMovies(): Flow<ResponseState<List<FavMovieModel>>>
     suspend fun insertFavoriteMovie(favMovie: FavMovieModel)
     suspend fun deleteFavoriteMovie(favMovie: FavMovieModel)
-    suspend fun checkIfMovieIsFavorited(name:String): Boolean
+    suspend fun checkIfMovieIsFavorited(name: String): Boolean
 }
 

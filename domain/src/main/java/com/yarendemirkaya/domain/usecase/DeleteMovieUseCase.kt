@@ -6,7 +6,7 @@ import com.yarendemirkaya.domain.repo.MovieRepository
 import kotlinx.coroutines.flow.Flow
 
 class DeleteMovieUseCase(private val movieRepository: MovieRepository) {
-    suspend operator fun invoke(cartId: Int, ): Flow<ResponseState<CartResponseModel>> {
+    suspend operator fun invoke(cartId: Int, ):ResponseState<CartResponseModel> {
         return movieRepository.deleteMovie(cartId)
     }
 }
