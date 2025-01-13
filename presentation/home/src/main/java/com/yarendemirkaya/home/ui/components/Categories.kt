@@ -72,8 +72,7 @@ fun Categories(
                         containerColor = if (isSelected) Color(0xFFFFA500) else Color(0xFF151515),
                         contentColor = if (isSelected) Color.White else Color.Gray,
                     ), shape = RoundedCornerShape(20.dp),
-                    border = BorderStroke(2.dp, Color(0xFFFFA500))
-                ) {
+                    border = BorderStroke(2.dp, Color(0xFFFFA500)) ) {
                     Text(text = category)
                 }
             }

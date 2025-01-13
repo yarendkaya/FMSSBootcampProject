@@ -11,7 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.yarendemirkaya.base.R
 
 @Composable
 fun AddCartButton(onCartClick: () -> Unit) {
@@ -29,7 +31,7 @@ fun AddCartButton(onCartClick: () -> Unit) {
         border = BorderStroke(2.dp, Color(0xFFFFA500))
     ) {
         Text(
-            text = "Add to Cart"
+            text = stringResource(R.string.add_to_cart)
         )
     }
 }

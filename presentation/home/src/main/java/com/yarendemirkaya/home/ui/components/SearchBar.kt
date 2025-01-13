@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yarendemirkaya.home.R
 
@@ -27,7 +28,7 @@ fun CustomSearchBar(onSearchQueryChange: (String) -> Unit) {
             onSearchQueryChange(it)
         },
         placeholder = {
-            Text(text = "Search...", color = Color.Gray)
+            Text(text = stringResource(R.string.search_bar), color = Color.Gray)
         },
         modifier = Modifier
             .fillMaxWidth()

@@ -6,13 +6,15 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.yarendemirkaya.cart.R
 
 @Composable
 fun Information(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Cart is ready for payment", color = Color.White) },
-        text = { Text("Do you want to go to the payment screen?", color = Color.White) },
+        title = { Text(text = stringResource(R.string.cart_dialog_title), color = Color.White) },
+        text = { Text(text = stringResource(R.string.cart_dialog_text), color = Color.White) },
         confirmButton = {
             Button(
                 onClick = onConfirm,
@@ -23,7 +25,7 @@ fun Information(onConfirm: () -> Unit, onDismiss: () -> Unit) {
                     disabledContainerColor = Color.Black
                 )
             ) {
-                Text("Yes")
+                Text(text = stringResource(R.string.btn_yes))
             }
         },
         dismissButton = {
@@ -36,7 +38,7 @@ fun Information(onConfirm: () -> Unit, onDismiss: () -> Unit) {
                     disabledContainerColor = Color.Black
                 )
             ) {
-                Text("No")
+                Text(text = stringResource(R.string.btn_no))
             }
         }, containerColor = Color(0xFF151515)
     )

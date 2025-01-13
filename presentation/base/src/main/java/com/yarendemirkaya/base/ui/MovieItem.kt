@@ -100,7 +100,7 @@ fun MovieItem(movie: MovieModel, onItemClick: () -> Unit, onCartClick: () -> Uni
             )
             Text(
                 modifier = Modifier.padding(start = 8.dp),
-                text = "${movie.price} ₺",
+                text = "${movie.price} USD",
                 fontSize = 18.sp,
                 color = Color.White,
             )
