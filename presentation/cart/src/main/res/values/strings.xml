@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cart_name">My Cart</string>
+    <string name="delete_question"> Do you want to delete all items from cart?</string>
+    <string name="delete_title">Delete</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+    <string name="cart_dialog_title">Cart is ready for payment"></string>
+    <string name="cart_dialog_text">Do you want to go to the payment screen?</string>
+    <string name="payment_button">Payment</string>
+
+
+</resources>

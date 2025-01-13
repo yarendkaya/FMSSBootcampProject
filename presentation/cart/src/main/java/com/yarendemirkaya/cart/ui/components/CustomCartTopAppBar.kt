@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yarendemirkaya.cart.R
@@ -32,13 +33,13 @@ fun CustomCartTopAppBar(onItemClicked: () -> Unit) {
             .padding(8.dp)
             .background(Color.Transparent),
 
-    ) {
+        ) {
         Text(
             modifier = Modifier
                 .padding(start = 8.dp)
                 .wrapContentHeight(Alignment.CenterVertically)
                 .wrapContentWidth(Alignment.CenterHorizontally),
-            text = "My Cart",
+            text = stringResource(R.string.cart_name),
             fontSize = 35.sp,
             color = Color.White
         )
@@ -46,7 +47,7 @@ fun CustomCartTopAppBar(onItemClicked: () -> Unit) {
         Icon(
             modifier = Modifier
                 .size(30.dp)
-                .padding(end=4.dp)
+                .padding(end = 4.dp)
                 .clickable {
                     onItemClicked()
                 },

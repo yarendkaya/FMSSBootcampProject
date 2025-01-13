@@ -6,13 +6,15 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.yarendemirkaya.cart.R
 
 @Composable
 fun DeleteDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Delete", color = Color.White) },
-        text = { Text("Do you want to delete all items from cart?", color = Color.White) },
+        title = { Text(text = stringResource(R.string.delete_title), color = Color.White) },
+        text = { Text(text = stringResource(R.string.delete_question), color = Color.White) },
         confirmButton = {
             Button(
                 onClick = onConfirm,
@@ -23,7 +25,7 @@ fun DeleteDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
                     disabledContainerColor = Color.Black
                 )
             ) {
-                Text("Yes")
+                Text(text = stringResource(R.string.btn_yes))
             }
         },
         dismissButton = {
@@ -36,7 +38,7 @@ fun DeleteDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
                     disabledContainerColor = Color.Black
                 )
             ) {
-                Text("No")
+                Text(text = stringResource(R.string.btn_no))
             }
         }, containerColor = Color(0xFF151515)
     )

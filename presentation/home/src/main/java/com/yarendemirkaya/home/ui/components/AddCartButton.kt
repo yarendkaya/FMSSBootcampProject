@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ fun AddCartButton(onCartClick: () -> Unit) {
             isClicked.value = false
         }
     }
+
     OutlinedButton(
         onClick = {
             isClicked.value = true
@@ -41,7 +43,9 @@ fun AddCartButton(onCartClick: () -> Unit) {
         border = BorderStroke(2.dp, Color(0xFFFFA500))
     ) {
         Text(
-            text = "Add to Cart", fontFamily = FontFamily(
+            text = stringResource(
+                id = R.string.add_to_cart
+            ), fontFamily = FontFamily(
                 Font(R.font.roboto_bold)
             )
         )

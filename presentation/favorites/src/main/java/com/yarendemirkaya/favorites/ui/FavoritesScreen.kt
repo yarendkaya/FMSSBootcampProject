@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +31,7 @@ import com.yarendemirkaya.base.ui.collectWithLifecycle
 import com.yarendemirkaya.domain.model.MovieModel
 import com.yarendemirkaya.domain.model.toInsertMovieModel
 import com.yarendemirkaya.domain.model.toMovieModel
+import com.yarendemirkaya.favorites.R
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -47,8 +49,7 @@ fun FavoritesScreen(
                 context,
                 it.message,
                 Toast.LENGTH_SHORT
-            )
-                .show()
+            ).show()
 
             is UiEffectFavorites.NavigateToDetailFromFavorites -> onNavigateToDetailFromFavorites(it.movie)
             is UiEffectFavorites.None -> Unit
@@ -92,13 +93,12 @@ fun CustomTopAppBar() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top=8.dp)
-        ,
+            .padding(top = 8.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Favourites",
+            text = stringResource(R.string.favorites_topBar),
             fontSize = 35.sp,
             textAlign = TextAlign.Center,
             color = Color.White

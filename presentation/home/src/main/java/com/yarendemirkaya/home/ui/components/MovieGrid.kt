@@ -29,7 +29,6 @@ fun MovieGrid(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(30.dp)
     ) {
-
         items(movies) { movie ->
             MovieItem(
                 movie = movie,
