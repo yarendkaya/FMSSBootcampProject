@@ -34,21 +34,21 @@ Navigation: Navigation Component
 
 
 📌Structures Used
-Android Gradle Plugin (AGP) 8.6.0
-MVI
-Multi-module
-Kotlin 1.9.0
-KSP 
-Jetpack Compose
-Glide
-Retrofit 
-Gson
-Room
-Dagger Hilt 
-Navigation Component 
-Coroutines
-Flow
-Material Design
+-Android Gradle Plugin (AGP) 8.6.0
+-MVI
+-Multi-module
+-Kotlin 1.9.0
+-KSP 
+-Jetpack Compose
+-Glide
+-Retrofit 
+-Gson
+-Room
+-Dagger Hilt 
+-Navigation Component 
+-Coroutines
+-Flow
+-Material Design
 
 
 
